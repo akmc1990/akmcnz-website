@@ -1,35 +1,28 @@
 import { FaMapMarkerAlt, FaBus, FaComment } from 'react-icons/fa';
 import { MdDirectionsBus } from 'react-icons/md';
 
-
 export const metadata = {
   title: '오시는 길 | AKMC 오클랜드 감리교회',
   description: '오클랜드 감리교회 위치 및 교통편 안내',
 };
 
-
 const busRoutes = ['820', '822', '834', '837', '839', '858', '875', '879'];
-
 
 const busStops = [
   { address: '14 Burns Avenue, Takapuna', direction: '시내 방향 (City)', link: 'https://www.google.com/maps/search/14+Burns+Avenue,+Takapuna' },
   { address: '21 Burns Avenue, Takapuna', direction: '시내 반대방향 (Away from City)', link: 'https://www.google.com/maps/search/21+Burns+Avenue,+Takapuna' },
 ];
 
-
 export default function DirectionsPage() {
   return (
     <div className="min-h-screen bg-church-light">
-      {/* Hero */}
       <div className="bg-church-navy py-16 text-center">
         <FaMapMarkerAlt className="text-church-gold text-5xl mx-auto mb-4" />
         <h1 className="text-4xl font-bold text-white mb-2">오시는 길</h1>
         <p className="text-church-gold text-lg">How to Find Us</p>
       </div>
 
-
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-10">
-        {/* Address Card */}
         <div className="bg-white rounded-2xl shadow-md overflow-hidden">
           <div className="bg-church-red px-6 py-4">
             <h2 className="text-white font-bold text-xl flex items-center gap-2">
@@ -48,8 +41,6 @@ export default function DirectionsPage() {
           </div>
         </div>
 
-
-        {/* Google Map */}
         <div className="bg-white rounded-2xl shadow-md overflow-hidden">
           <div className="bg-church-navy px-6 py-4">
             <h2 className="text-white font-bold text-xl">지도</h2>
@@ -67,3 +58,75 @@ export default function DirectionsPage() {
           <div className="p-4">
             <a
               href="https://www.google.com/maps/place/427+Lake+Road,+Takapuna,+Auckland+0622,+New+Zealand"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-church-red text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+            >
+              <FaMapMarkerAlt />
+              구글 지도에서 열기
+            </a>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div className="bg-church-teal px-6 py-4">
+            <h2 className="text-white font-bold text-xl flex items-center gap-2">
+              <MdDirectionsBus />
+              가까운 버스정류장
+            </h2>
+          </div>
+          <div className="p-6 space-y-4">
+            <div>
+              <h3 className="font-semibold text-church-navy mb-2">운행버스</h3>
+              <div className="flex flex-wrap gap-2">
+                {busRoutes.map(route => (
+                  <span key={route} className="bg-church-navy text-white px-3 py-1 rounded-full text-sm font-medium">
+                    {route}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="border-t border-gray-100 pt-4">
+              <h3 className="font-semibold text-church-navy mb-3">정류장 위치</h3>
+              <div className="space-y-3">
+                {busStops.map((stop, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <FaBus className="text-church-teal mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-gray-800">{stop.address}</p>
+                      <p className="text-sm text-gray-500">{stop.direction}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div className="bg-gray-700 px-6 py-4">
+            <h2 className="text-white font-bold text-xl">구글지도에서 정류장 위치 확인하기</h2>
+          </div>
+          <div className="p-6 flex flex-col sm:flex-row gap-4">
+            <a
+              href="https://www.google.com/maps/search/14+Burns+Avenue+Takapuna"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-church-red text-white text-center py-3 px-4 rounded-xl font-medium hover:bg-red-700 transition-colors"
+            >
+              시내방향
+            </a>
+            <a
+              href="https://www.google.com/maps/search/21+Burns+Avenue+Takapuna"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-church-navy text-white text-center py-3 px-4 rounded-xl font-medium hover:bg-blue-900 transition-colors"
+            >
+              시내 반대방향
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
