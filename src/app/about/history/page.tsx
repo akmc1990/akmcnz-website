@@ -2,19 +2,63 @@ const historyData = [
   {
     year: '1990',
     entries: [
-      { date: '04/18/1990', content: '뉴질랜드 최초 한인감리교회 창립
-Establishment of the first Korean Methodist Church in New Zealand' },
+      { date: '04/18/1990', content: '뉴질랜드 최초 한인감리교회 창립\nEstablishment of the first Korean Methodist Church in New Zealand' },
+    ]
+  },
+  {
+    year: '1991',
+    entries: [
+      { date: '03/1991', content: '첫 번째 담임목사 부임\nFirst Senior Pastor appointed' },
+    ]
+  },
+  {
+    year: '2000',
+    entries: [
+      { date: '04/18/2000', content: '교회 창립 10주년 기념 예배\n10th Anniversary Worship Service' },
+    ]
+  },
+  {
+    year: '2010',
+    entries: [
+      { date: '04/18/2010', content: '교회 창립 20주년 기념 예배\n20th Anniversary Worship Service' },
+    ]
+  },
+  {
+    year: '2015',
+    entries: [
+      { date: '2015', content: '1차 피지단기선교\n1st Short-term Mission to Fiji' },
     ]
   },
   {
     year: '2017',
     entries: [
-      { date: '12/03/2017', content: '이원용 전도사 (수련목) 이임
-Departure of Pastor Lee Won-yong (Probationary)' },
-      { date: '04/06/2017', content: '정혜영 전도사 (아동부, 학생부 파트타임 담당) 부임
-Appointment of Pastor Jung Hye-young (Children & Youth, Part-time)' },
-      { date: '10/07/2017', content: '2차 피지단기선교(총 8명)
-2nd Short-term Mission to Fiji (Total 8 members)' },
+      { date: '12/03/2017', content: '이원용 전도사 (수련목) 이임\nDeparture of Pastor Lee Won-yong (Probationary)' },
+      { date: '04/06/2017', content: '정혜영 전도사 (아동부, 학생부 파트타임 담당) 부임\nAppointment of Pastor Jung Hye-young (Children & Youth, Part-time)' },
+      { date: '10/07/2017', content: '2차 피지단기선교(총 8명)\n2nd Short-term Mission to Fiji (Total 8 members)' },
+    ]
+  },
+  {
+    year: '2019',
+    entries: [
+      { date: '12/2019', content: '4차 피지단기선교\n4th Short-term Mission to Fiji' },
+    ]
+  },
+  {
+    year: '2020',
+    entries: [
+      { date: '04/18/2020', content: '교회 창립 30주년 기념 예배\n30th Anniversary Worship Service' },
+    ]
+  },
+  {
+    year: '2024',
+    entries: [
+      { date: '2024', content: '김지겸 목사 담임 부임\nAppointment of Pastor Jikyum Kim as Senior Pastor' },
+    ]
+  },
+  {
+    year: '2026',
+    entries: [
+      { date: '04/18/2026', content: '교회 창립 36주년 기념 예배\n36th Anniversary Worship Service' },
     ]
   },
 ]
