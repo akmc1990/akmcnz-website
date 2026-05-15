@@ -1,6 +1,5 @@
 export async function verifyNetlifyToken(token: string): Promise<any> {
   try {
-    // Decode JWT without verification for basic validation
     const parts = token.split('.')
     if (parts.length !== 3) return null
     const payload = JSON.parse(atob(parts[1]))
@@ -11,3 +10,6 @@ export async function verifyNetlifyToken(token: string): Promise<any> {
     return null
   }
 }
+
+// Alias for backward compatibility
+export const verifyToken = verifyNetlifyToken;
