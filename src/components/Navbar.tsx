@@ -5,7 +5,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
 
-const navItems = [
+type NavChild = { href: string; label: string };
+type NavItem =
+  | { href: string; label: string; children?: undefined }
+  | { href?: undefined; label: string; children: NavChild[] };
+
+const navItems: NavItem[] = [
   { href: '/', label: 'Home' },
   {
     label: '교회소개 Introduction',
@@ -56,7 +61,7 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => {
-              if ('children' in item) {
+              if (item.children) {
                 return (
                   <div key={item.label} className="relative group">
                     <button
@@ -112,7 +117,7 @@ export default function Navbar() {
         <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
           <nav className="max-w-7xl mx-auto px-4 py-3 space-y-1">
             {navItems.map((item) => {
-              if ('children' in item) {
+              if (item.children) {
                 return (
                   <div key={item.label}>
                     <button
@@ -123,12 +128,12 @@ export default function Navbar() {
                       <FaChevronDown className={`text-xs transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />
                     </button>
                     {openDropdown === item.label && (
-                      <div className="ml-4 space-y-1">
+                      <div className="pl-4 space-y-1">
                         {item.children.map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
-                            className={`block px-3 py-2 text-sm text-gray-600 hover:text-church-navy rounded-lg hover:bg-gray-50 ${pathname === child.href ? 'text-church-navy font-semibold' : ''}`}
+                            className={`block px-3 py-2 text-sm rounded-lg ${pathname === child.href ? 'text-church-navy font-semibold bg-church-light' : 'text-gray-600 hover:text-church-navy'}`}
                             onClick={() => setMobileOpen(false)}
                           >
                             {child.label}
@@ -143,7 +148,7 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-3 py-2.5 text-sm font-medium text-gray-700 hover:text-church-navy rounded-lg hover:bg-gray-50 ${pathname === item.href ? 'text-church-navy font-semibold bg-church-light' : ''}`}
+                  className={`block px-3 py-2.5 text-sm rounded-lg ${pathname === item.href ? 'text-church-navy font-semibold bg-church-light' : 'text-gray-700 hover:text-church-navy'}`}
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
