@@ -11,16 +11,23 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
-    // Encode form for Netlify Forms
-    const body = new URLSearchParams({ 'form-name': 'contact', ...formData }).toString()
-    try {
-      await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body })
-      setSubmitted(true)
-    } catch (err) {
-      alert('제출 중 오류가 발생했습니다. 이메일로 직접 연락해 주세요.')
-    } finally {
-      setSubmitting(false)
-    }
+        // Send form data to API
+        try {
+                const res = await fetch('/api/contact', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify(formData),
+                })
+                if (res.ok) {
+                          setSubmitted(true)
+                } else {
+                          alert('제출 중 오류가 발생했습니다. 이메일로 직접 연락해 주세요.')
+                }
+  }
+  } catch {
+          alert('제출 중 오류가 발생했습니다. 이메일로 직접 연락해 주세요.')
+  } finally {
+          setSubmitting(false)
   }
 
   return (
