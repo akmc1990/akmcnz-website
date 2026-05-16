@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
                                         'Content-Type': 'application/json',
                                       },
                             body: JSON.stringify({
-                                        from: 'noreply@akmcnz.org',
+                                                            from: 'onboarding@resend.dev',
                                         to: [ADMIN_EMAIL],
                                         reply_to: email,
                                         subject: `[문의하기] ${name}님의 문의`,
