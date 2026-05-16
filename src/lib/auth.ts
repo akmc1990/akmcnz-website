@@ -1,15 +1,15 @@
-export async function verifyNetlifyToken(token: string): Promise<any> {
-  try {
-    const parts = token.split('.')
-    if (parts.length !== 3) return null
-    const payload = JSON.parse(atob(parts[1]))
-    if (payload.exp && Date.now() / 1000 > payload.exp) return null
-    if (!payload.sub || !payload.email) return null
-    return payload
-  } catch (error) {
-    return null
-  }
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+
+export async function verifyAdminSession(): Promise<boolean> {
+    try {
+          const session = await getServerSession(authOptions);
+          return !!session?.user;
+    } catch {
+          return false;
+    }
 }
 
-// Alias for backward compatibility
-export const verifyToken = verifyNetlifyToken;
+// Backward compatibility alias
+export const verifyToken = verifyAdminSession;
+export const verifyNetlifyToken = verifyAdminSession;
