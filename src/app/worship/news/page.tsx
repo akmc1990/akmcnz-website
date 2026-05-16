@@ -114,8 +114,21 @@ export default function NewsPage() {
   const loadCardNews = async (item: CardNewsItem) => {
     if (selectedId === item.public_id) return;
     setFetchingCard(true); setSelectedId(item.public_id);
-    try { const res = await fetch(item.secure_url); setSelectedData(await res.json()); }
-    catch (e) { console.error(e); } finally { setFetchingCard(false); }
+    try {
+      const res = await fetch(item.secure_url);
+      const text = await res.text();
+      try {
+        setSelectedData(JSON.parse(text));
+      } catch {
+        const m = text.match(/const\s+cards\s*=\s*(\[[\s\S]*?\]);?\s*\n/) || text.match(/const\s+cards\s*=\s*(\[[\s\S]*\])\s*(?:;|\n|$)/);
+        if (m) {
+          // eslint-disable-next-line no-new-func
+          const fn = new Function('return ' + m[1]);
+          const cards = fn() as CardDef[];
+          setSelectedData({ cards, date: item.date, label: item.date });
+        } else { console.error('Cannot parse card news file'); }
+      }
+    } catch (e) { console.error(e); } finally { setFetchingCard(false); }
   };
 
   useEffect(() => {
@@ -158,7 +171,7 @@ export default function NewsPage() {
           <div className="flex gap-2">
             {isAdmin && <button onClick={() => setShowUpload(v => !v)} className="px-4 py-2 bg-church-gold text-white rounded-lg text-sm font-semibold hover:opacity-90">{showUpload ? '✕ 닫기' : '+ 카드뉴스 업로드'}</button>}
             {isAdmin ? <button onClick={() => signOut()} className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-100">로그아웃</button>
-              : <button onClick={() => signIn('google')} className="px-4 py-2 bg-church-navy text-white rounded-lg text-sm font-semibold hover:opacity-90">관리자 로그인</button>}
+            : <button onClick={() => signIn('google')} className="px-4 py-2 bg-church-navy text-white rounded-lg text-sm font-semibold hover:opacity-90">관리자 로그인</button>}
           </div>
         </div>
         {isAdmin && showUpload && (
@@ -172,7 +185,7 @@ export default function NewsPage() {
                 </div>
                 <div className="flex flex-col gap-1 flex-1 min-w-48">
                   <label className="text-sm font-semibold text-gray-600">제목/라벨 (선택)</label>
-                  <input type="text" value={uploadLabel} onChange={e => setUploadLabel(e.target.value)} placeholder="예: 2026. 05. 17 제37권 20호" className="border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+                  <input type="text" value={uploadLabel} onChange={e => setUploadLabel(e.target.value)} placeholder="예: 2026. 05. 17 젔37궀20호" className="border border-gray-300 rounded-lg px-3 py-2 text-sm" />
                 </div>
               </div>
               <div className="flex flex-col gap-1">
@@ -194,10 +207,10 @@ export default function NewsPage() {
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             {loading ? <div className="text-center py-16 text-gray-400">불러오는 중...</div>
-              : list.length === 0 ? <div className="text-center py-16 text-gray-400">등록된 카드뉴스가 없습니다.</div>
-              : fetchingCard ? <div className="text-center py-16 text-gray-400">불러오는 중...</div>
-              : selectedData ? <CardNewsViewer cards={selectedData.cards} />
-              : null}
+            : list.length === 0 ? <div className="text-center py-16 text-gray-400">등록된 카드뉴스가 없습니다.</div>
+            : fetchingCard ? <div className="text-center py-16 text-gray-400">불러오는 중...</div>
+            : selectedData ? <CardNewsViewer cards={selectedData.cards} />
+            : null}
           </div>
           {list.length > 0 && (
             <div className="lg:w-64 flex flex-col gap-2">
