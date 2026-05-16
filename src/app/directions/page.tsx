@@ -2,8 +2,8 @@ import { FaMapMarkerAlt, FaBus, FaComment } from 'react-icons/fa';
 import { MdDirectionsBus } from 'react-icons/md';
 
 export const metadata = {
-  title: '오시는 길 | AKMC 오클랜드 감리교회',
-  description: '오클랜드 감리교회 위치 및 교통편 안내',
+  title: '오시는 길 | AKMC 오클랜드감리교회',
+  description: '오클랜드감리교회 위치 및 교통편 안내',
 };
 
 const busRoutes = ['820', '822', '834', '837', '839', '858', '875', '879'];
