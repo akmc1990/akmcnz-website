@@ -16,7 +16,7 @@ export default function Footer() {
               </div>
               <div>
                 <p className="font-bold text-lg">AKMC</p>
-                <p className="text-church-teal text-sm">오클랜드 감리교회</p>
+                <p className="text-church-teal text-sm">오클랜드감리교회</p>
               </div>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
