@@ -25,7 +25,9 @@ export default function Footer() {
             </p>
             <p className="text-church-gold text-sm font-medium mt-2">
               담임목사: 김지겸 Pastor Jikyum Kim
-                        교육목사: 유성재 Pastor Sungjae Yoo
+            </p>
+            <p className="text-church-gold text-sm font-medium mt-1">
+              교육목사: 유성재 Pastor Sungjae Yoo
             </p>
           </div>
 
