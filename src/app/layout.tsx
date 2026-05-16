@@ -12,14 +12,14 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: 'AKMC 오클랜드 감리교회 | Auckland Korean Methodist Church',
-  description: '뉴질랜드 오클랜드 감리교회 – 믿음이 보이는 교회 | Auckland Korean Methodist Church, New Zealand',
-  keywords: ['오클랜드 감리교회', 'AKMC', 'Auckland Korean Methodist Church', '뉴질랜드 한인교회'],
+  title: 'AKMC 오클랜드감리교회 | Auckland Korean Methodist Church',
+  description: '뉴질랜드 오클랜드감리교회 – 믿음이 보이는 교회 | Auckland Korean Methodist Church, New Zealand',
+  keywords: ['오클랜드감리교회', 'AKMC', 'Auckland Korean Methodist Church', '뉴질랜드 한인교회'],
   openGraph: {
-    title: 'AKMC 오클랜드 감리교회',
+    title: 'AKMC 오클랜드감리교회',
     description: '믿음이 보이는 교회 | A Church Where Faith Is Visible',
     url: 'https://akmcnz.org',
-    siteName: 'AKMC 오클랜드 감리교회',
+    siteName: 'AKMC 오클랜드감리교회',
     locale: 'ko_KR',
     type: 'website',
   },
