@@ -20,11 +20,12 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-              뉴질랜드 오클랜드 한인감리교회<br />
+                        뉴질랜드 오클랜드감리교회<br />
               Auckland Korean Methodist Church
             </p>
             <p className="text-church-gold text-sm font-medium mt-2">
               담임목사: 김지겸 Pastor Jikyum Kim
+                        교육목사: 유성재 Pastor Sungjae Yoo
             </p>
           </div>
 
