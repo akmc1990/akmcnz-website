@@ -35,7 +35,7 @@ export async function GET() {
     const cardnews = Array.from(dateMap.values())
       .map(entry => ({
         ...entry,
-        images: entry.images.sort((a, b) => a.public_id.localeCompare(b.public_id)),
+                images: entry.images.sort((a, b) => b.public_id.localeCompare(a.public_id)),
       }))
             .sort((a, b) => b.date.localeCompare(a.date));
 
