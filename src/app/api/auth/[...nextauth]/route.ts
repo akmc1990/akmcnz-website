@@ -3,7 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 
 const ALLOWED_EMAILS = process.env.ALLOWED_ADMIN_EMAILS
   ? process.env.ALLOWED_ADMIN_EMAILS.split(',')
-    : [];
+    : ['gungsan0@gmail.com'];
 
 export const authOptions: NextAuthOptions = {
     providers: [
