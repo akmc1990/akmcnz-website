@@ -37,7 +37,7 @@ export async function GET() {
         ...entry,
         images: entry.images.sort((a, b) => a.public_id.localeCompare(b.public_id)),
       }))
-      .sort((a, b) => b.date.localeCompare(a.date));
+            .sort((a, b) => a.date.localeCompare(b.date));
 
     return NextResponse.json({ cardnews });
   } catch (error) {
