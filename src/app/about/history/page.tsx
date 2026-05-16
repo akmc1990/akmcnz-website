@@ -75,7 +75,7 @@ export default function HistoryPage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="bg-church-red text-white rounded-xl p-5 mb-8">
-          <h2 className="text-lg font-bold">오클랜드 감리교회 발자취</h2>
+          <h2 className="text-lg font-bold">오클랜드감리교회 발자취</h2>
           <p className="text-white/80 text-sm">The Footsteps of Auckland Korean Methodist Church</p>
         </div>
 
