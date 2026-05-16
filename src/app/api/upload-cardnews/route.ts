@@ -16,18 +16,20 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
-    const { cards, label, date } = body;
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
+    const date = formData.get('date') as string | null;
+    const label = formData.get('label') as string | null;
 
-    if (!cards || !Array.isArray(cards)) {
-      return NextResponse.json({ error: 'cards array is required' }, { status: 400 });
+    if (!file) {
+      return NextResponse.json({ error: 'file is required' }, { status: 400 });
     }
     if (!date) {
       return NextResponse.json({ error: 'date is required (YYYY-MM-DD)' }, { status: 400 });
     }
 
-    const payload = JSON.stringify({ cards, label: label || date, date });
-    const buffer = Buffer.from(payload, 'utf-8');
+    const jsxText = await file.text();
+    const buffer = Buffer.from(jsxText, 'utf-8');
     const publicId = `akmcnz-cardnews/${date}`;
 
     const result = await new Promise((resolve, reject) => {
@@ -36,7 +38,7 @@ export async function POST(request: NextRequest) {
           public_id: publicId,
           resource_type: 'raw',
           overwrite: true,
-          format: 'json',
+          format: 'jsx',
         },
         (error, result) => {
           if (error) reject(error);
