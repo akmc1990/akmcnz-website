@@ -11,23 +11,22 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitting(true)
-        // Send form data to API
-        try {
-                const res = await fetch('/api/contact', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify(formData),
-                })
-                if (res.ok) {
-                          setSubmitted(true)
-                } else {
-                          alert('제출 중 오류가 발생했습니다. 이메일로 직접 연락해 주세요.')
-                }
-  }
-  } catch {
-          alert('제출 중 오류가 발생했습니다. 이메일로 직접 연락해 주세요.')
-  } finally {
-          setSubmitting(false)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      if (res.ok) {
+        setSubmitted(true)
+      } else {
+        alert('제출 중 오류가 발생했습니다. 이메일로 직접 연락해 주세요.')
+      }
+    } catch {
+      alert('제출 중 오류가 발생했습니다. 이메일로 직접 연락해 주세요.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -41,7 +40,6 @@ export default function ContactPage() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Info */}
           <div className="space-y-4">
             <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
               <div className="flex items-start gap-3">
@@ -78,7 +76,6 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Form */}
           <div className="lg:col-span-2">
             {submitted ? (
               <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
@@ -91,14 +88,7 @@ export default function ContactPage() {
             ) : (
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                 <h2 className="text-xl font-bold text-church-navy mb-6">문의하기</h2>
-                <form
-                  name="contact"
-                  method="POST"
-                  data-netlify="true"
-                  onSubmit={handleSubmit}
-                  className="space-y-4"
-                >
-                  <input type="hidden" name="form-name" value="contact" />
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">성함 *</label>
@@ -119,13 +109,13 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={e => setFormData({ ...formData, email: e.target.value })}
                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-church-teal"
-                        placeholder="이메일 주소"
+                        placeholder="이메일을 입력하세요"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">집 주소</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">주소</label>
                       <input
                         type="text"
                         value={formData.address}
