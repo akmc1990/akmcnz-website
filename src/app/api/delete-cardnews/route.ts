@@ -17,15 +17,30 @@ export async function DELETE(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { public_id } = body;
+    const { date } = body;
 
-    if (!public_id) {
-      return NextResponse.json({ error: 'public_id is required' }, { status: 400 });
+    if (!date) {
+      return NextResponse.json({ error: 'date is required (YYYY-MM-DD)' }, { status: 400 });
     }
 
-    const result = await cloudinary.uploader.destroy(public_id, { resource_type: 'raw' });
+    const folder = 'akmcnz-cardnews/' + date;
 
-    return NextResponse.json({ success: true, result });
+    // Find all images in this date folder
+    const existing = await cloudinary.api.resources({
+      type: 'upload',
+      resource_type: 'image',
+      prefix: folder + '/',
+      max_results: 100,
+    });
+
+    if (existing.resources.length === 0) {
+      return NextResponse.json({ success: true, message: 'No images found', deleted: 0 });
+    }
+
+    const ids = existing.resources.map((r: { public_id: string }) => r.public_id);
+    const result = await cloudinary.api.delete_resources(ids, { resource_type: 'image' });
+
+    return NextResponse.json({ success: true, deleted: ids.length, result });
   } catch (error) {
     console.error('Delete cardnews error:', error);
     return NextResponse.json({ error: 'Failed to delete card news' }, { status: 500 });
