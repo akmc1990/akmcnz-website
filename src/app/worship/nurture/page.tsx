@@ -1,8 +1,8 @@
 import { FaBook, FaPray, FaBible, FaUsers } from 'react-icons/fa';
 
 export const metadata = {
-  title: '양육 | AKMC 오클랜드 감리교회',
-  description: '오클랜드 감리교회 양육 및 훈련 프로그램 안내',
+  title: '양육 | AKMC 오클랜드감리교회',
+  description: '오클랜드감리교회 양육 및 훈련 프로그램 안내',
 };
 
 const programs = [
