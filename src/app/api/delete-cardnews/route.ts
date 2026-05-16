@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function POST(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -17,37 +17,17 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { cards, label, date } = body;
+    const { public_id } = body;
 
-    if (!cards || !Array.isArray(cards)) {
-      return NextResponse.json({ error: 'cards array is required' }, { status: 400 });
-    }
-    if (!date) {
-      return NextResponse.json({ error: 'date is required (YYYY-MM-DD)' }, { status: 400 });
+    if (!public_id) {
+      return NextResponse.json({ error: 'public_id is required' }, { status: 400 });
     }
 
-    const payload = JSON.stringify({ cards, label: label || date, date });
-    const buffer = Buffer.from(payload, 'utf-8');
-    const publicId = `akmcnz-cardnews/${date}`;
-
-    const result = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        {
-          public_id: publicId,
-          resource_type: 'raw',
-          overwrite: true,
-          format: 'json',
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      ).end(buffer);
-    });
+    const result = await cloudinary.uploader.destroy(public_id, { resource_type: 'raw' });
 
     return NextResponse.json({ success: true, result });
   } catch (error) {
-    console.error('Upload cardnews error:', error);
-    return NextResponse.json({ error: 'Failed to upload card news' }, { status: 500 });
+    console.error('Delete cardnews error:', error);
+    return NextResponse.json({ error: 'Failed to delete card news' }, { status: 500 });
   }
 }
