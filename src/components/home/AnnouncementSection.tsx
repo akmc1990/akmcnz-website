@@ -2,42 +2,39 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FaCalendarAlt, FaClock, FaChurch, FaBullhorn } from 'react-icons/fa';
+import Image from 'next/image';
+import { FaCalendarAlt, FaClock, FaChurch } from 'react-icons/fa';
 
-interface Bulletin {
-  public_id: string;
-  secure_url: string;
-  format: string;
-  created_at: string;
-  context?: {
-    custom?: {
-      title?: string;
-    };
-  };
-}
+interface CardImage { url: string; public_id: string; }
+interface CardNewsEntry { date: string; images: CardImage[]; }
 
 export default function AnnouncementSection() {
-  const [latestBulletin, setLatestBulletin] = useState<Bulletin | null>(null);
+  const [latestEntry, setLatestEntry] = useState<CardNewsEntry | null>(null);
+  const [currentIdx, setCurrentIdx] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchLatestBulletin() {
+    async function fetchLatest() {
       try {
-        const res = await fetch('/api/bulletins?limit=1');
+        const res = await fetch('/api/cardnews');
         if (res.ok) {
           const data = await res.json();
-          if (data.bulletins && data.bulletins.length > 0) {
-            setLatestBulletin(data.bulletins[0]);
+          if (data.cardnews && data.cardnews.length > 0) {
+            setLatestEntry(data.cardnews[0]);
           }
         }
       } catch (err) {
-        console.error('Failed to fetch bulletin:', err);
+        console.error('Failed to fetch cardnews:', err);
       } finally {
         setLoading(false);
       }
     }
-    fetchLatestBulletin();
+    fetchLatest();
   }, []);
+
+  const images = latestEntry?.images || [];
+  const handlePrev = () => setCurrentIdx(i => Math.max(0, i - 1));
+  const handleNext = () => setCurrentIdx(i => Math.min(images.length - 1, i + 1));
 
   const services = [
     {
@@ -57,15 +54,11 @@ export default function AnnouncementSection() {
     },
   ];
 
-  const formatDate = (dateStr: string) => {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
-
   return (
     <section className="py-16 bg-church-light">
       <div className="max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
           {/* Worship Schedule */}
           <div className="bg-white rounded-2xl shadow-md overflow-hidden">
             <div className="bg-church-navy px-6 py-4 flex items-center gap-3">
@@ -92,10 +85,7 @@ export default function AnnouncementSection() {
                 </div>
               ))}
               <div className="mt-4 pt-4 border-t border-gray-100">
-                <Link
-                  href="/about/service"
-                  className="text-church-teal hover:text-church-navy text-sm font-medium flex items-center gap-1 transition-colors"
-                >
+                <Link href="/about/service" className="text-church-teal hover:text-church-navy text-sm font-medium flex items-center gap-1 transition-colors">
                   <FaCalendarAlt />
                   <span>전체 예배 일정 보기 →</span>
                 </Link>
@@ -103,71 +93,65 @@ export default function AnnouncementSection() {
             </div>
           </div>
 
-          {/* Latest Bulletin */}
+          {/* Latest Card News */}
           <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-            <div className="bg-church-red px-6 py-4 flex items-center gap-3">
-              <FaBullhorn className="text-white text-xl" />
+            <div className="bg-church-gold px-6 py-4 flex items-center justify-between">
               <div>
                 <h2 className="text-white font-bold text-lg">최신 주보</h2>
-                <p className="text-red-200 text-sm">Latest Bulletin</p>
+                <p className="text-amber-100 text-sm">{latestEntry ? latestEntry.date : 'Latest Bulletin'}</p>
               </div>
+              <Link href="/worship/news" className="text-white text-sm underline underline-offset-2 hover:text-amber-100">
+                전체보기 →
+              </Link>
             </div>
-            <div className="p-6">
+            <div className="p-4">
               {loading ? (
-                <div className="flex items-center justify-center h-40">
-                  <div className="spinner" />
-                </div>
-              ) : latestBulletin ? (
-                <div className="space-y-4">
-                  <p className="text-sm text-gray-500 flex items-center gap-2">
-                    <FaCalendarAlt className="text-church-red" />
-                    {formatDate(latestBulletin.created_at)}
-                  </p>
-                  {latestBulletin.format === 'pdf' ? (
-                    <div className="bg-gray-50 rounded-xl p-6 text-center">
-                      <div className="text-5xl mb-3">📄</div>
-                      <p className="text-church-navy font-semibold mb-3">
-                        {latestBulletin.context?.custom?.title || '주보'}
-                      </p>
-                      <a
-                        href={latestBulletin.secure_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-church-red text-white px-5 py-2 rounded-lg text-sm hover:bg-red-700 transition-colors"
-                      >
-                        PDF 보기
-                      </a>
-                    </div>
-                  ) : (
-                    <div className="relative rounded-xl overflow-hidden bg-gray-50">
-                      <img
-                        src={latestBulletin.secure_url}
-                        alt="최신 주보"
-                        className="w-full object-contain max-h-64"
-                      />
-                    </div>
-                  )}
-                  <Link
-                    href="/worship/news"
-                    className="block text-center text-church-red hover:text-red-700 text-sm font-medium transition-colors"
-                  >
-                    모든 주보 보기 →
-                  </Link>
+                <div className="flex items-center justify-center h-64 text-gray-400">불러오는 중...</div>
+              ) : images.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-64 gap-3 text-gray-400">
+                  <p>등록된 주보가 없습니다.</p>
+                  <Link href="/worship/news" className="text-church-gold hover:underline text-sm">주보 보기 →</Link>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-40 text-gray-400 gap-3">
-                  <FaBullhorn className="text-4xl opacity-30" />
-                  <p className="text-sm">아직 업로드된 주보가 없습니다.</p>
-                  <Link
-                    href="/worship/news"
-                    className="text-church-red hover:text-red-700 text-sm font-medium transition-colors"
-                  >
-                    주보 페이지 바로가기 →
+                <div className="flex flex-col items-center gap-3">
+                  {/* Image */}
+                  <div className="relative w-full">
+                    <Image
+                      src={images[currentIdx].url}
+                      alt={'주보 ' + (currentIdx + 1)}
+                      width={500}
+                      height={650}
+                      className="w-full rounded-xl object-contain"
+                      style={{ maxHeight: 380 }}
+                      unoptimized
+                    />
+                  </div>
+
+                  {/* Controls */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handlePrev}
+                      disabled={currentIdx === 0}
+                      className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-lg font-bold transition-all disabled:opacity-30"
+                      style={{ borderColor: '#B8711A', color: '#B8711A' }}
+                    >&#8249;</button>
+                    <span className="text-gray-500 text-sm">{currentIdx + 1} / {images.length}</span>
+                    <button
+                      onClick={handleNext}
+                      disabled={currentIdx === images.length - 1}
+                      className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-lg font-bold transition-all disabled:opacity-30"
+                      style={{ borderColor: '#B8711A', color: '#B8711A' }}
+                    >&#8250;</button>
+                  </div>
+
+                  <Link href="/worship/news" className="text-church-gold hover:underline text-sm font-medium">
+                    전체 주보 보기 →
                   </Link>
                 </div>
               )}
             </div>
           </div>
+
         </div>
       </div>
     </section>
