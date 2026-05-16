@@ -52,13 +52,13 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-3">
             <Image
                               src="/logo.png"
-                              alt="AKMC 오클랜드 감리교회"
+                              alt="AKMC 오클랜드감리교회"
                               width={40}
                               height={40}
                               className="rounded-full"
                             />
             <div className="hidden sm:block">
-              <div className="text-church-navy font-bold text-sm leading-tight">오클랜드 감리교회</div>
+              <div className="text-church-navy font-bold text-sm leading-tight">오클랜드감리교회</div>
               <div className="text-gray-500 text-xs leading-tight">Auckland Korean Methodist Church</div>
             </div>
           </Link>
