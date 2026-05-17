@@ -21,8 +21,12 @@ function uploadBuffer(
     const stream = cloudinary.uploader.upload_stream(
       options,
       (error, result) => {
-        if (error) reject(error);
-        else resolve(result as { secure_url: string; public_id: string; pages?: number });
+        if (error) {
+          console.error('[upload-cardnews] upload_stream error:', JSON.stringify(error));
+          reject(error);
+        } else {
+          resolve(result as { secure_url: string; public_id: string; pages?: number });
+        }
       }
     );
     stream.end(buffer);
@@ -47,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     const folder = 'akmcnz-cardnews/' + date;
 
-    // Delete existing images in this date folder first (overwrite)
+    // Delete existing images in this date folder first
     try {
       const existing = await cloudinary.api.resources({
         type: 'upload',
@@ -59,7 +63,9 @@ export async function POST(request: NextRequest) {
         const ids = existing.resources.map((r: { public_id: string }) => r.public_id);
         await cloudinary.api.delete_resources(ids);
       }
-    } catch { /* ignore */ }
+    } catch (e) {
+      console.error('[upload-cardnews] delete existing images error:', e);
+    }
 
     // Delete existing raw (PDF) in this date folder
     try {
@@ -73,16 +79,30 @@ export async function POST(request: NextRequest) {
         const ids = existingRaw.resources.map((r: { public_id: string }) => r.public_id);
         await cloudinary.api.delete_resources(ids, { resource_type: 'raw' });
       }
-    } catch { /* ignore */ }
+    } catch (e) {
+      console.error('[upload-cardnews] delete existing raw error:', e);
+    }
 
     let pdfUrl: string | null = null;
-    let pageCount = 0;
     const uploadedImages: { url: string; public_id: string }[] = [];
 
     if (pdfFile) {
+      console.log('[upload-cardnews] PDF upload started, size:', pdfFile.size);
       const pdfBuffer = Buffer.from(await pdfFile.arrayBuffer());
 
-      // 1. Upload PDF as image resource - Cloudinary extracts pages and returns page count
+      // Step 1: Upload PDF as raw for download link
+      console.log('[upload-cardnews] Uploading PDF as raw resource...');
+      const rawResult = await uploadBuffer(pdfBuffer, {
+        folder,
+        resource_type: 'raw',
+        public_id: 'bulletin.pdf',
+      });
+      pdfUrl = rawResult.secure_url;
+      console.log('[upload-cardnews] Raw PDF uploaded:', pdfUrl);
+
+      // Step 2: Upload PDF with pages:true to detect page count
+      // Cloudinary returns the total number of pages in the 'pages' field
+      console.log('[upload-cardnews] Uploading PDF as image to detect page count...');
       const pdfResult = await uploadBuffer(pdfBuffer, {
         folder,
         resource_type: 'image',
@@ -91,55 +111,67 @@ export async function POST(request: NextRequest) {
         public_id: '000_source',
       });
 
-      pageCount = pdfResult.pages || 1;
+      const pageCount = pdfResult.pages ?? 1;
+      console.log('[upload-cardnews] PDF page count:', pageCount);
 
-      // 2. Upload original PDF as raw for download link
-      const rawResult = await uploadBuffer(pdfBuffer, {
-        folder,
-        resource_type: 'raw',
-        public_id: 'bulletin.pdf',
-      });
-      pdfUrl = rawResult.secure_url;
-
-      // 3. Build image URLs for each page using Cloudinary page transformation
+      // Step 3: For each page, upload the PDF with page-specific transformation
+      // Using eager transformations per page to create individual stored images
       for (let i = 1; i <= pageCount; i++) {
-        const pageUrl = cloudinary.url(pdfResult.public_id, {
-          resource_type: 'image',
-          format: 'jpg',
-          transformation: [{ page: i, quality: 'auto:good', fetch_format: 'auto' }],
-          secure: true,
-        });
-        uploadedImages.push({
-          url: pageUrl,
-          public_id: pdfResult.public_id + '_pg' + i,
-        });
+        const paddedPage = String(i).padStart(3, '0');
+        console.log('[upload-cardnews] Uploading page', i, 'of', pageCount);
+        try {
+          // Upload with page transformation - Cloudinary extracts that specific page
+          const pageResult = await uploadBuffer(pdfBuffer, {
+            folder,
+            resource_type: 'image',
+            format: 'jpg',
+            page: i,
+            public_id: 'page_' + paddedPage,
+            quality: 'auto:good',
+          });
+          uploadedImages.push({ url: pageResult.secure_url, public_id: pageResult.public_id });
+          console.log('[upload-cardnews] Page', i, 'done:', pageResult.secure_url);
+        } catch (pageErr) {
+          console.error('[upload-cardnews] Failed page', i, ':', pageErr);
+          // Try alternate approach: use the 000_source image with page param in URL
+          const pageUrl = cloudinary.url(pdfResult.public_id, {
+            resource_type: 'image',
+            format: 'jpg',
+            transformation: [{ page: i }],
+            secure: true,
+          });
+          uploadedImages.push({ url: pageUrl, public_id: pdfResult.public_id + '_p' + paddedPage });
+        }
       }
     } else if (files.length > 0) {
       // Image upload mode (existing behavior)
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+      const sortedFiles = [...files].sort((a, b) => a.name.localeCompare(b.name));
+      for (let i = 0; i < sortedFiles.length; i++) {
+        const file = sortedFiles[i];
         const buffer = Buffer.from(await file.arrayBuffer());
-        const idx = String(i + 1).padStart(3, '0');
+        const paddedIndex = String(i + 1).padStart(3, '0');
         const result = await uploadBuffer(buffer, {
           folder,
           resource_type: 'image',
-          public_id: idx,
+          public_id: paddedIndex,
         });
         uploadedImages.push({ url: result.secure_url, public_id: result.public_id });
       }
     } else {
-      return NextResponse.json({ error: 'PDF file or image files are required' }, { status: 400 });
+      return NextResponse.json({ error: 'No files provided' }, { status: 400 });
     }
+
+    console.log('[upload-cardnews] Complete. Total images:', uploadedImages.length);
 
     return NextResponse.json({
       success: true,
-      date,
       images: uploadedImages,
       pdfUrl,
-      pageCount,
+      count: uploadedImages.length,
     });
   } catch (error) {
-    console.error('Upload error:', error);
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+    console.error('[upload-cardnews] Unhandled error:', error);
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: 'Upload failed: ' + message }, { status: 500 });
   }
 }
