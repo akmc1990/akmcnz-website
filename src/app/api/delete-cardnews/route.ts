@@ -16,16 +16,14 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    const body = await request.json();
-    const { date } = body;
-
+    const { date } = await request.json();
     if (!date) {
-      return NextResponse.json({ error: 'date is required (YYYY-MM-DD)' }, { status: 400 });
+      return NextResponse.json({ error: 'date is required' }, { status: 400 });
     }
 
     const folder = 'akmcnz-cardnews/' + date;
 
-    // Find all images in this date folder
+    // Delete all images in this date folder
     const existing = await cloudinary.api.resources({
       type: 'upload',
       resource_type: 'image',
@@ -33,34 +31,16 @@ export async function DELETE(request: NextRequest) {
       max_results: 100,
     });
 
-    let deletedImages = 0;
+    let deleted = 0;
     if (existing.resources.length > 0) {
       const ids = existing.resources.map((r: { public_id: string }) => r.public_id);
-      await cloudinary.api.delete_resources(ids, { resource_type: 'image' });
-      deletedImages = ids.length;
+      await cloudinary.api.delete_resources(ids);
+      deleted = ids.length;
     }
 
-    // Also delete raw (PDF) resources
-    let deletedPdfs = 0;
-    try {
-      const existingRaw = await cloudinary.api.resources({
-        type: 'upload',
-        resource_type: 'raw',
-        prefix: folder + '/',
-        max_results: 10,
-      });
-      if (existingRaw.resources.length > 0) {
-        const rawIds = existingRaw.resources.map((r: { public_id: string }) => r.public_id);
-        await cloudinary.api.delete_resources(rawIds, { resource_type: 'raw' });
-        deletedPdfs = rawIds.length;
-      }
-    } catch {
-      // ignore if no raw resources
-    }
-
-    return NextResponse.json({ success: true, deleted: deletedImages, deletedPdfs });
+    return NextResponse.json({ success: true, deleted });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Delete failed' }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: 'Delete failed: ' + message }, { status: 500 });
   }
 }
