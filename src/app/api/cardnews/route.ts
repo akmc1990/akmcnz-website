@@ -46,12 +46,11 @@ export async function GET() {
     // Group images by date folder
     // Two modes:
     // 1. Direct image uploads: public_id = akmcnz-cardnews/YYYY-MM-DD/001
-    // 2. PDF uploads: public_id = akmcnz-cardnews/YYYY-MM-DD/000_source (pages: N)
+    // 2. PDF page uploads: public_id = akmcnz-cardnews/YYYY-MM-DD/page_001
+    // 3. Old PDF source (skip): public_id = akmcnz-cardnews/YYYY-MM-DD/000_source
     const dateMap = new Map<string, {
       date: string;
       images: { url: string; public_id: string }[];
-      sourcePublicId?: string;
-      sourceResource?: { public_id: string; pages?: number };
     }>();
 
     for (const r of result.resources) {
@@ -65,55 +64,21 @@ export async function GET() {
       }
       const entry = dateMap.get(date)!;
 
+      // Skip 000_source (old PDF upload artifact - first page only)
       if (filename && filename.startsWith('000_source')) {
-        // This is a PDF-sourced image - store the source resource
-        entry.sourcePublicId = r.public_id;
-        entry.sourceResource = r;
-      } else {
-        // Regular uploaded image
-        entry.images.push({ url: r.secure_url, public_id: r.public_id });
+        continue;
       }
-    }
 
-    // For PDF-sourced entries, get accurate page count via api.resource()
-    // api.resources() doesn't always return pages field, but api.resource() does
-    const sourceEntries = Array.from(dateMap.values()).filter(e => e.sourcePublicId);
-    for (const entry of sourceEntries) {
-      try {
-        const resourceDetail = await cloudinary.api.resource(entry.sourcePublicId!, {
-          resource_type: 'image',
-        });
-        if (entry.sourceResource) {
-          entry.sourceResource.pages = resourceDetail.pages ?? 1;
-        }
-      } catch (e) {
-        console.error('Failed to get resource detail for', entry.sourcePublicId, e);
-      }
+      entry.images.push({ url: r.secure_url, public_id: r.public_id });
     }
 
     // Build final cardnews list
     const cardnews = Array.from(dateMap.values())
       .map(entry => {
-        let images = entry.images;
-
-        // If PDF source exists, generate page URLs from Cloudinary on-the-fly transformation
-        if (entry.sourcePublicId && entry.sourceResource) {
-          const pageCount = entry.sourceResource.pages ?? 1;
-          const pageImages: { url: string; public_id: string }[] = [];
-          for (let i = 1; i <= pageCount; i++) {
-            const paddedPage = String(i).padStart(3, '0');
-            // Cloudinary on-the-fly page transformation URL
-            const pageUrl = `https://res.cloudinary.com/${cloudName}/image/upload/pg_${i}/${entry.sourcePublicId}.jpg`;
-            pageImages.push({
-              url: pageUrl,
-              public_id: entry.sourcePublicId + '_p' + paddedPage,
-            });
-          }
-          images = pageImages;
-        } else {
-          // Sort regular images by public_id ascending
-          images = images.sort((a, b) => a.public_id.localeCompare(b.public_id));
-        }
+        // Sort images by public_id DESCENDING (newest/highest number first)
+        // This puts page_007 before page_001, matching typical bulletin order
+        // (last uploaded = first page of bulletin displayed first)
+        const images = entry.images.sort((a, b) => b.public_id.localeCompare(a.public_id));
 
         return {
           date: entry.date,
@@ -121,7 +86,7 @@ export async function GET() {
           pdfUrl: pdfMap.get(entry.date) || null,
         };
       })
-      .filter(entry => entry.images.length > 0) // only show entries with images
+      .filter(entry => entry.images.length > 0)
       .sort((a, b) => b.date.localeCompare(a.date)); // newest date first
 
     return NextResponse.json({ cardnews });
