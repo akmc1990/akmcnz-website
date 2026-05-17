@@ -3,14 +3,8 @@ import { v2 as cloudinary } from 'cloudinary';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-// Increase Vercel body size limit and function duration
-export const config = {
-  api: {
-    bodyParser: false,
-    responseLimit: false,
-  },
-  maxDuration: 60,
-};
+// Next.js App Router: set max function duration (seconds)
+export const maxDuration = 60;
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -88,7 +82,7 @@ export async function POST(request: NextRequest) {
     if (pdfFile) {
       const pdfBuffer = Buffer.from(await pdfFile.arrayBuffer());
 
-      // 1. Upload PDF as image resource to get page count and converted images
+      // 1. Upload PDF as image resource - Cloudinary extracts pages and returns page count
       const pdfResult = await uploadBuffer(pdfBuffer, {
         folder,
         resource_type: 'image',
@@ -99,7 +93,7 @@ export async function POST(request: NextRequest) {
 
       pageCount = pdfResult.pages || 1;
 
-      // 2. Upload original PDF as raw for download
+      // 2. Upload original PDF as raw for download link
       const rawResult = await uploadBuffer(pdfBuffer, {
         folder,
         resource_type: 'raw',
@@ -107,21 +101,21 @@ export async function POST(request: NextRequest) {
       });
       pdfUrl = rawResult.secure_url;
 
-      // 3. Build image URLs for each page using pg_ transformation
+      // 3. Build image URLs for each page using Cloudinary page transformation
       for (let i = 1; i <= pageCount; i++) {
         const pageUrl = cloudinary.url(pdfResult.public_id, {
           resource_type: 'image',
           format: 'jpg',
-          transformation: [{ page: i, quality: 'auto:good' }],
+          transformation: [{ page: i, quality: 'auto:good', fetch_format: 'auto' }],
           secure: true,
         });
         uploadedImages.push({
           url: pageUrl,
-          public_id: `${pdfResult.public_id}_pg${i}`,
+          public_id: pdfResult.public_id + '_pg' + i,
         });
       }
     } else if (files.length > 0) {
-      // Image upload mode
+      // Image upload mode (existing behavior)
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const buffer = Buffer.from(await file.arrayBuffer());
