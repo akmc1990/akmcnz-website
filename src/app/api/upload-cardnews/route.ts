@@ -12,7 +12,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Helper: upload buffer to Cloudinary via upload_stream (no base64 overhead)
+// Helper: upload buffer to Cloudinary via upload_stream
 function uploadBuffer(
   buffer: Buffer,
   options: Record<string, unknown>
@@ -100,9 +100,9 @@ export async function POST(request: NextRequest) {
       pdfUrl = rawResult.secure_url;
       console.log('[upload-cardnews] Raw PDF uploaded:', pdfUrl);
 
-      // Step 2: Upload PDF with pages:true to detect page count
-      // Cloudinary returns the total number of pages in the 'pages' field
-      console.log('[upload-cardnews] Uploading PDF as image to detect page count...');
+      // Step 2: Upload PDF as image with pages:true
+      // Cloudinary will convert the first page and return total page count
+      console.log('[upload-cardnews] Uploading PDF as image to get page count...');
       const pdfResult = await uploadBuffer(pdfBuffer, {
         folder,
         resource_type: 'image',
@@ -112,37 +112,25 @@ export async function POST(request: NextRequest) {
       });
 
       const pageCount = pdfResult.pages ?? 1;
-      console.log('[upload-cardnews] PDF page count:', pageCount);
+      console.log('[upload-cardnews] Page count from Cloudinary:', pageCount, 'public_id:', pdfResult.public_id);
 
-      // Step 3: For each page, upload the PDF with page-specific transformation
-      // Using eager transformations per page to create individual stored images
+      // Step 3: Build page image URLs using Cloudinary on-the-fly transformation
+      // This approach avoids uploading each page separately (saves time and avoids timeout)
+      // Cloudinary will generate each page image on demand from the stored PDF
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+      const sourcePublicId = pdfResult.public_id; // e.g. akmcnz-cardnews/2026-05-17/000_source
+
       for (let i = 1; i <= pageCount; i++) {
         const paddedPage = String(i).padStart(3, '0');
-        console.log('[upload-cardnews] Uploading page', i, 'of', pageCount);
-        try {
-          // Upload with page transformation - Cloudinary extracts that specific page
-          const pageResult = await uploadBuffer(pdfBuffer, {
-            folder,
-            resource_type: 'image',
-            format: 'jpg',
-            page: i,
-            public_id: 'page_' + paddedPage,
-            quality: 'auto:good',
-          });
-          uploadedImages.push({ url: pageResult.secure_url, public_id: pageResult.public_id });
-          console.log('[upload-cardnews] Page', i, 'done:', pageResult.secure_url);
-        } catch (pageErr) {
-          console.error('[upload-cardnews] Failed page', i, ':', pageErr);
-          // Try alternate approach: use the 000_source image with page param in URL
-          const pageUrl = cloudinary.url(pdfResult.public_id, {
-            resource_type: 'image',
-            format: 'jpg',
-            transformation: [{ page: i }],
-            secure: true,
-          });
-          uploadedImages.push({ url: pageUrl, public_id: pdfResult.public_id + '_p' + paddedPage });
-        }
+        // Build URL: https://res.cloudinary.com/{cloud}/image/upload/pg_{i}/v{version}/{public_id}.jpg
+        const pageUrl = `https://res.cloudinary.com/${cloudName}/image/upload/pg_${i}/${sourcePublicId}.jpg`;
+        uploadedImages.push({
+          url: pageUrl,
+          public_id: sourcePublicId + '_p' + paddedPage,
+        });
       }
+
+      console.log('[upload-cardnews] Built', uploadedImages.length, 'page URLs');
     } else if (files.length > 0) {
       // Image upload mode (existing behavior)
       const sortedFiles = [...files].sort((a, b) => a.name.localeCompare(b.name));
