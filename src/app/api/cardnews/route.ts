@@ -51,7 +51,7 @@ export async function GET() {
       date: string;
       images: { url: string; public_id: string }[];
       sourcePublicId?: string;
-      sourcePages?: number;
+      sourceResource?: { public_id: string; pages?: number };
     }>();
 
     for (const r of result.resources) {
@@ -66,12 +66,28 @@ export async function GET() {
       const entry = dateMap.get(date)!;
 
       if (filename && filename.startsWith('000_source')) {
-        // This is a PDF-sourced image - store the source info
+        // This is a PDF-sourced image - store the source resource
         entry.sourcePublicId = r.public_id;
-        entry.sourcePages = r.pages ?? 1;
+        entry.sourceResource = r;
       } else {
         // Regular uploaded image
         entry.images.push({ url: r.secure_url, public_id: r.public_id });
+      }
+    }
+
+    // For PDF-sourced entries, get accurate page count via api.resource()
+    // api.resources() doesn't always return pages field, but api.resource() does
+    const sourceEntries = Array.from(dateMap.values()).filter(e => e.sourcePublicId);
+    for (const entry of sourceEntries) {
+      try {
+        const resourceDetail = await cloudinary.api.resource(entry.sourcePublicId!, {
+          resource_type: 'image',
+        });
+        if (entry.sourceResource) {
+          entry.sourceResource.pages = resourceDetail.pages ?? 1;
+        }
+      } catch (e) {
+        console.error('Failed to get resource detail for', entry.sourcePublicId, e);
       }
     }
 
@@ -81,9 +97,10 @@ export async function GET() {
         let images = entry.images;
 
         // If PDF source exists, generate page URLs from Cloudinary on-the-fly transformation
-        if (entry.sourcePublicId && entry.sourcePages && entry.sourcePages > 0) {
+        if (entry.sourcePublicId && entry.sourceResource) {
+          const pageCount = entry.sourceResource.pages ?? 1;
           const pageImages: { url: string; public_id: string }[] = [];
-          for (let i = 1; i <= entry.sourcePages; i++) {
+          for (let i = 1; i <= pageCount; i++) {
             const paddedPage = String(i).padStart(3, '0');
             // Cloudinary on-the-fly page transformation URL
             const pageUrl = `https://res.cloudinary.com/${cloudName}/image/upload/pg_${i}/${entry.sourcePublicId}.jpg`;
