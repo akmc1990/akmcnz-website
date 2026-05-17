@@ -53,8 +53,13 @@ export default function NewsPage() {
   const handleSelectDate = (date: string) => { setSelectedDate(date); setCurrentIdx(0); };
 
   const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploadPdf(e.target.files?.[0] || null);
+    const file = e.target.files?.[0] || null;
+    setUploadPdf(file);
     setUploadError('');
+    // Warn if PDF is too large (Vercel 4.5MB body limit)
+    if (file && file.size > 4 * 1024 * 1024) {
+      setUploadError('⚠️ PDF 파일이 4MB를 초과합니다. 업로드가 실패할 수 있습니다. PDF를 압축하거나 페이지를 줄여주세요.');
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,25 +73,52 @@ export default function NewsPage() {
     if (!uploadDate) { setUploadError('날짜를 입력해주세요.'); return; }
     if (uploadMode === 'pdf' && !uploadPdf) { setUploadError('PDF 파일을 선택해주세요.'); return; }
     if (uploadMode === 'images' && uploadFiles.length === 0) { setUploadError('이미지 파일을 선택해주세요.'); return; }
+
     setUploading(true);
-    setUploadProgress(uploadMode === 'pdf' ? 'PDF 변환 중... (시간이 걸릴 수 있습니다)' : '업로드 중...');
+    setUploadProgress(uploadMode === 'pdf' ? 'PDF 변환 중... (페이지 수에 따라 30초~1분 소요될 수 있습니다)' : '업로드 중...');
     try {
       const formData = new FormData();
       formData.append('date', uploadDate);
       if (uploadMode === 'pdf' && uploadPdf) { formData.append('pdf', uploadPdf); }
       else { uploadFiles.forEach(f => formData.append('files', f)); }
-      const res = await fetch('/api/upload-cardnews', { method: 'POST', body: formData });
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 90000); // 90s timeout
+
+      const res = await fetch('/api/upload-cardnews', {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+
       if (res.ok) {
+        const result = await res.json();
         setShowUpload(false); setUploadDate(''); setUploadPdf(null);
         setUploadFiles([]); setUploadProgress(''); setUploadMode('pdf');
         if (fileInputRef.current) fileInputRef.current.value = '';
         if (pdfInputRef.current) pdfInputRef.current.value = '';
         await fetchList();
+        if (result.pageCount) {
+          alert('업로드 완료! ' + result.pageCount + '페이지가 변환되었습니다.');
+        }
       } else {
-        const err = await res.json();
-        setUploadError(err.error || '업로드 실패');
+        let errMsg = '업로드 실패';
+        try {
+          const errData = await res.json();
+          errMsg = errData.error || errMsg;
+        } catch { /* ignore */ }
+        if (res.status === 413) errMsg = '파일이 너무 큽니다 (최대 4.5MB). PDF를 압축해주세요.';
+        if (res.status === 504) errMsg = '서버 시간 초과. PDF 페이지 수를 줄이거나 나중에 다시 시도해주세요.';
+        setUploadError('오류: ' + errMsg);
       }
-    } catch { setUploadError('오류 발생'); }
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        setUploadError('요청 시간 초과 (90초). PDF 파일이 너무 크거나 페이지가 많습니다. 파일을 줄여서 다시 시도해주세요.');
+      } else {
+        setUploadError('네트워크 오류: ' + String(err));
+      }
+    }
     finally { setUploading(false); setUploadProgress(''); }
   };
 
@@ -129,7 +161,8 @@ export default function NewsPage() {
 
         {isAdmin && showUpload && (
           <div className="bg-white rounded-xl shadow p-6 mb-8 border border-gray-200">
-            <h2 className="text-lg font-semibold text-church-navy mb-4">주보 업로드</h2>
+            <h2 className="text-lg font-semibold text-church-navy mb-1">주보 업로드</h2>
+            <p className="text-xs text-gray-400 mb-4">PDF는 4MB 이하 권장 (Vercel 서버 제한)</p>
             <form onSubmit={handleUpload} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">날짜 (YYYY-MM-DD)</label>
@@ -151,11 +184,11 @@ export default function NewsPage() {
               </div>
               {uploadMode === 'pdf' && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">주보 PDF 파일</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">주보 PDF 파일 (4MB 이하 권장)</label>
                   <div className="border-2 border-dashed border-church-navy/30 rounded-lg p-4 bg-blue-50">
-                    <p className="text-xs text-gray-500 mb-2">PDF를 업로드하면 각 페이지가 자동으로 이미지 카드로 변환되며, 원본 PDF 다운로드 링크도 함께 제공됩니다.</p>
+                    <p className="text-xs text-gray-500 mb-2">PDF를 업로드하면 각 페이지가 자동으로 이미지 카드로 변환되며, 원본 PDF 다운로드 링크도 함께 제공됩니다. 변환에 30초~1분 정도 소요될 수 있습니다.</p>
                     <input ref={pdfInputRef} type="file" accept="application/pdf,.pdf" onChange={handlePdfChange} className="text-sm" />
-                    {uploadPdf && <p className="text-xs text-green-600 mt-1">선택됨: {uploadPdf.name} ({(uploadPdf.size / 1024 / 1024).toFixed(1)}MB)</p>}
+                    {uploadPdf && <p className="text-xs text-gray-600 mt-1">선택됨: {uploadPdf.name} ({(uploadPdf.size / 1024 / 1024).toFixed(1)}MB)</p>}
                   </div>
                 </div>
               )}
@@ -166,11 +199,22 @@ export default function NewsPage() {
                   {uploadFiles.length > 0 && <p className="text-xs text-gray-500 mt-1">선택됨: {uploadFiles.length}개 파일</p>}
                 </div>
               )}
-              {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
-              {uploadProgress && <p className="text-blue-500 text-sm animate-pulse">{uploadProgress}</p>}
+              {uploadError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                  <p className="text-red-600 text-sm">{uploadError}</p>
+                </div>
+              )}
+              {uploadProgress && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                    <p className="text-blue-600 text-sm">{uploadProgress}</p>
+                  </div>
+                </div>
+              )}
               <button type="submit" disabled={uploading}
                 className="bg-church-navy text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 transition disabled:opacity-50">
-                {uploading ? '업로드 중...' : (uploadMode === 'pdf' ? 'PDF 업로드 & 변환' : '이미지 업로드')}
+                {uploading ? '처리 중...' : (uploadMode === 'pdf' ? 'PDF 업로드 & 변환' : '이미지 업로드')}
               </button>
             </form>
           </div>
