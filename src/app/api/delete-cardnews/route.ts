@@ -33,16 +33,34 @@ export async function DELETE(request: NextRequest) {
       max_results: 100,
     });
 
-    if (existing.resources.length === 0) {
-      return NextResponse.json({ success: true, message: 'No images found', deleted: 0 });
+    let deletedImages = 0;
+    if (existing.resources.length > 0) {
+      const ids = existing.resources.map((r: { public_id: string }) => r.public_id);
+      await cloudinary.api.delete_resources(ids, { resource_type: 'image' });
+      deletedImages = ids.length;
     }
 
-    const ids = existing.resources.map((r: { public_id: string }) => r.public_id);
-    const result = await cloudinary.api.delete_resources(ids, { resource_type: 'image' });
+    // Also delete raw (PDF) resources
+    let deletedPdfs = 0;
+    try {
+      const existingRaw = await cloudinary.api.resources({
+        type: 'upload',
+        resource_type: 'raw',
+        prefix: folder + '/',
+        max_results: 10,
+      });
+      if (existingRaw.resources.length > 0) {
+        const rawIds = existingRaw.resources.map((r: { public_id: string }) => r.public_id);
+        await cloudinary.api.delete_resources(rawIds, { resource_type: 'raw' });
+        deletedPdfs = rawIds.length;
+      }
+    } catch {
+      // ignore if no raw resources
+    }
 
-    return NextResponse.json({ success: true, deleted: ids.length, result });
+    return NextResponse.json({ success: true, deleted: deletedImages, deletedPdfs });
   } catch (error) {
-    console.error('Delete cardnews error:', error);
-    return NextResponse.json({ error: 'Failed to delete card news' }, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: 'Delete failed' }, { status: 500 });
   }
 }
