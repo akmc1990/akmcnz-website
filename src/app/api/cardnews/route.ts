@@ -31,12 +31,12 @@ export async function GET() {
       dateMap.get(date)!.images.push({ url: r.secure_url, public_id: r.public_id });
     }
 
-    // Sort images within each date by public_id descending (007 first)
+    // Sort images within each date by public_id ascending (00 first, then 01, 02, ...)
     // and sort dates descending (newest date first)
     const cardnews = Array.from(dateMap.values())
       .map(entry => ({
         ...entry,
-        images: entry.images.sort((a, b) => b.public_id.localeCompare(a.public_id)),
+        images: entry.images.sort((a, b) => a.public_id.localeCompare(b.public_id)),
       }))
       .sort((a, b) => b.date.localeCompare(a.date));
 
