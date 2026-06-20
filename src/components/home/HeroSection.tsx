@@ -4,44 +4,78 @@ import Link from 'next/link'
 import { FiChevronDown } from 'react-icons/fi'
 
 const slides = [
-  { title: '뉴질랜드 오클랜드\n감리교회', subtitle: 'Auckland Korean Methodist Church', slogan: '믿음이 보이는 교회', sloganEn: 'A Church Where Faith Is Visible', bg: 'from-church-navy to-church-teal' },
-  { title: '예배를 모든 사역의\n최우선으로 삼는 교회', subtitle: 'A Church That Prioritizes Worship Above All Ministries', slogan: '', sloganEn: '', bg: 'from-blue-900 to-church-teal' },
-]
+  {
+        titleKo: '뉴질랜드 오클랜드',
+        titleKo2: '감리교회',
+        subtitle: 'Auckland Korean Methodist Church',
+        slogan: '믿음이 보이는 교회',
+        sloganEn: 'A Church Where Faith Is Visible',
+        bg: 'from-black via-gray-900 to-black',
+  },
+  {
+        titleKo: '예배를 최우선으로',
+        titleKo2: '삼는 교회',
+        subtitle: 'A Church That Prioritizes Worship Above All',
+        slogan: '',
+        sloganEn: '',
+        bg: 'from-black via-blue-950 to-black',
+  },
+  ]
 
 export default function HeroSection() {
-  const [current, setCurrent] = useState(0)
-  useEffect(() => {
-    const timer = setInterval(() => setCurrent(prev => (prev + 1) % slides.length), 5000)
-    return () => clearInterval(timer)
-  }, [])
-  const slide = slides[current]
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      <div className={`absolute inset-0 bg-gradient-to-br ${slide.bg} transition-all duration-1000`} />
-      <div className="absolute inset-0 bg-black/30" />
-      <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-        <p className="text-church-gold text-sm font-medium tracking-widest uppercase mb-4">2026년 교회 표어</p>
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4 whitespace-pre-line">{slide.title}</h1>
-        <p className="text-xl md:text-2xl text-white/80 mb-6">{slide.subtitle}</p>
-        {slide.slogan && (
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 inline-block">
-            <p className="text-2xl font-bold text-church-gold">"{slide.slogan}"</p>
-            <p className="text-white/80 mt-1">"{slide.sloganEn}"</p>
-          </div>
-        )}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link href="/worship/online" className="bg-church-teal hover:bg-teal-600 text-white px-8 py-3 rounded-full font-semibold transition-colors">온라인 예배 참여</Link>
-          <Link href="/about" className="border-2 border-white text-white hover:bg-white hover:text-church-navy px-8 py-3 rounded-full font-semibold transition-all">교회 소개</Link>
-        </div>
-      </div>
-      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
-        {slides.map((_, i) => (
-          <button key={i} onClick={() => setCurrent(i)} className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-white w-6' : 'bg-white/50'}`} />
-        ))}
-      </div>
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/70 animate-bounce z-10">
-        <FiChevronDown className="w-6 h-6" />
-      </div>
-    </section>
-  )
-    }
+    const [current, setCurrent] = useState(0)
+    useEffect(() => {
+          const timer = setInterval(() => setCurrent(prev => (prev + 1) % slides.length), 5000)
+          return () => clearInterval(timer)
+    }, [])
+    const slide = slides[current]
+    return (
+          <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+                <div className={`absolute inset-0 bg-gradient-to-br ${slide.bg} transition-all duration-1000`} />
+                <div className="absolute inset-0 bg-black/30" />
+          
+                <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
+                        <p className="text-white/70 text-xl mb-4" style={{fontFamily: 'cursive', fontStyle: 'italic'}}>
+                                  Welcome to
+                        </p>p>
+                        <h1 className="heading-impact text-white mb-2" style={{fontSize: 'clamp(3rem, 10vw, 7rem)'}}>
+                          {slide.titleKo}
+                        </h1>h1>
+                        <h1 className="heading-impact text-blue-400 mb-6" style={{fontSize: 'clamp(2.5rem, 8vw, 6rem)'}}>
+                          {slide.titleKo2}
+                        </h1>h1>
+                        <p className="text-xl md:text-2xl text-white/80 mb-6 font-light">{slide.subtitle}</p>p>
+                
+                  {slide.slogan && (
+                      <div className="mb-8 border-l-4 border-blue-400 pl-4 text-left inline-block">
+                                  <p className="text-xl font-bold text-blue-300">&ldquo;{slide.slogan}&rdquo;</p>p>
+                                  <p className="text-white/70 mt-1 text-sm">{slide.sloganEn}</p>p>
+                      </div>div>
+                        )}
+                
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                                  <Link href="/about/service"
+                                                className="btn-cic btn-cic-dark px-8 py-4 text-base font-black tracking-widest">
+                                              예배 안내 SERVICES
+                                  </Link>Link>
+                                  <Link href="/worship/online"
+                                                className="btn-cic px-8 py-4 text-base font-black tracking-widest"
+                                                style={{borderColor: 'white', color: 'white'}}>
+                                              온라인 예배 ONLINE
+                                  </Link>Link>
+                        </div>div>
+                
+                        <div className="flex justify-center gap-2 mb-8">
+                          {slides.map((_, i) => (
+                        <button key={i} onClick={() => setCurrent(i)}
+                                        className={`h-3 rounded-full transition-all duration-300 ${i === current ? 'bg-blue-400 w-8' : 'bg-white/40 w-3'}`} />
+                      ))}
+                        </div>div>
+                </div>div>
+          
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+                        <FiChevronDown className="w-8 h-8 text-white/60" />
+                </div>div>
+          </section>section>
+        )
+}</section>
