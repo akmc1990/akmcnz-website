@@ -1,79 +1,39 @@
 import Link from 'next/link';
-import { FaChurch, FaYoutube, FaImages, FaMapMarkerAlt, FaBullhorn, FaCross, FaEnvelope } from 'react-icons/fa';
+import { FaChurch, FaBullhorn, FaImages, FaCross, FaMapMarkerAlt, FaEnvelope, FaVideo } from 'react-icons/fa';
 
 const links = [
-  {
-    href: '/worship/online',
-    icon: FaYoutube,
-    label: '온라인 예배',
-    labelEn: 'Online Worship',
-    color: 'bg-red-600 hover:bg-red-700',
-  },
-  {
-    href: '/worship/news',
-    icon: FaBullhorn,
-    label: '주보',
-    labelEn: 'Bulletin',
-    color: 'bg-church-navy hover:bg-blue-900',
-  },
-  {
-    href: '/gallery',
-    icon: FaImages,
-    label: '사진/영상',
-    labelEn: 'Gallery',
-    color: 'bg-church-teal hover:bg-teal-700',
-  },
-  {
-    href: '/about/service',
-    icon: FaChurch,
-    label: '예배 안내',
-    labelEn: 'Services',
-    color: 'bg-church-gold hover:bg-yellow-600',
-  },
-  {
-    href: '/mission',
-    icon: FaCross,
-    label: '선교',
-    labelEn: 'Mission',
-    color: 'bg-purple-700 hover:bg-purple-800',
-  },
-  {
-    href: '/directions',
-    icon: FaMapMarkerAlt,
-    label: '오시는 길',
-    labelEn: 'Directions',
-    color: 'bg-church-red hover:bg-red-700',
-  },
-  {
-    href: '/contact',
-    icon: FaEnvelope,
-    label: 'Contact',
-    labelEn: 'Contact Us',
-    color: 'bg-gray-700 hover:bg-gray-800',
-  },
-];
+  { href: '/about/service', icon: FaChurch, label: '예배 안내', labelEn: 'Services' },
+  { href: '/worship/news', icon: FaBullhorn, label: '주보', labelEn: 'Bulletin' },
+  { href: '/gallery', icon: FaImages, label: '사진/영상', labelEn: 'Gallery' },
+  { href: '/worship/online', icon: FaVideo, label: '온라인 예배', labelEn: 'Online' },
+  { href: '/mission', icon: FaCross, label: '선교', labelEn: 'Mission' },
+  { href: '/directions', icon: FaMapMarkerAlt, label: '오시는 길', labelEn: 'Directions' },
+  { href: '/contact', icon: FaEnvelope, label: 'Contact', labelEn: 'Contact Us' },
+  ];
 
 export default function QuickLinks() {
-  return (
-    <section className="py-10 bg-white border-b border-gray-100">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
-          {links.map((link) => {
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`${link.color} text-white rounded-xl p-3 flex flex-col items-center justify-center gap-2 transition-all duration-200 hover:scale-105 hover:shadow-md min-h-[80px]`}
-              >
-                <Icon className="text-2xl" />
-                <span className="text-xs font-bold text-center leading-tight">{link.label}</span>
-                <span className="text-xs opacity-75 text-center leading-tight hidden sm:block">{link.labelEn}</span>
-              </Link>
-            );
+    return (
+          <section className="py-16 bg-black">
+                <div className="max-w-6xl mx-auto px-4">
+                        <div className="text-center mb-10">
+                                  <h2 className="heading-impact text-white text-4xl md:text-5xl">
+                                              바로가기 <span className="text-blue-400">QUICK LINKS</span>span>
+                                  </h2>h2>
+                        </div>div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2">
+                          {links.map((link) => {
+                        const Icon = link.icon;
+                        return (
+                                        <Link key={link.href} href={link.href}
+                                                          className="group flex flex-col items-center justify-center p-6 border-2 border-gray-800 hover:border-blue-500 hover:bg-blue-600 transition-all duration-200">
+                                                        <Icon className="w-8 h-8 text-blue-400 group-hover:text-white mb-3 transition-colors" />
+                                                        <span className="font-black text-white text-xs uppercase tracking-wide text-center">{link.label}</span>span>
+                                                        <span className="text-gray-500 group-hover:text-white/70 text-xs mt-1 transition-colors">{link.labelEn}</span>span>
+                                        </Link>Link>
+                                      );
           })}
-        </div>
-      </div>
-    </section>
-  );
-}
+                        </div>div>
+                </div>div>
+          </section>section>
+        );
+}</section>
