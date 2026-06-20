@@ -8,57 +8,22 @@
 html, body { max-width: 100vw; overflow-x: hidden; font-family: 'Noto Sans KR', sans-serif; }
 body { color: #1a1a1a; background: #ffffff; }
 a { color: inherit; text-decoration: none; }
+
+/* CIC-style scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 3px; }
 
+/* Impact heading utility */
 .heading-impact {
-    font-family: Impact, Haettenschweiler, 'Franklin Gothic Bold', Charcoal, sans-serif;
-    font-style: italic;
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-style: normal;
     text-transform: uppercase;
     letter-spacing: -0.02em;
     line-height: 0.9;
 }
 
-.section-heading {
-    font-family: Impact, Haettenschweiler, 'Franklin Gothic Bold', Charcoal, sans-serif;
-    font-style: italic;
-    text-transform: uppercase;
-    color: #2563eb;
-    font-size: 2.5rem;
-    line-height: 1;
-}
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
 
-.btn-cic {
-    display: inline-block;
-    padding: 0.75rem 2rem;
-    font-family: Impact, Haettenschweiler, sans-serif;
-    font-style: italic;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-size: 1rem;
-    border: 3px solid #000;
-    background: #fff;
-    color: #000;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-cic:hover { background: #000; color: #fff; }
-
-.btn-cic-dark { background: #000; color: #fff; border-color: #000; }
-.btn-cic-dark:hover { background: #2563eb; border-color: #2563eb; }
-
-.spinner {
-    display: inline-block;
-    width: 2rem;
-    height: 2rem;
-    border: 4px solid #2563eb;
-    border-top-color: transparent;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
+/* aspect-video fallback */
+.aspect-video { aspect-ratio: 16 / 9; }
