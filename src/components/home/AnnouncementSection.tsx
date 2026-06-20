@@ -21,6 +21,8 @@ const newsItems = [
   },
 ]
 
+const SERMON_VIDEO_ID = 'Z87UiFjE-us'
+
 export default function AnnouncementSection() {
   return (
     <>
@@ -39,20 +41,17 @@ export default function AnnouncementSection() {
               </p>
               <Link
                 href="/gallery"
-                className="inline-block px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-sm border-2 border-black hover:bg-transparent hover:text-black transition-all duration-200"
+                className="inline-block bg-black text-white font-black uppercase tracking-widest px-8 py-4 text-sm hover:bg-blue-700 transition-colors"
               >
                 설교 영상 더 보기
               </Link>
             </div>
-            <div className="aspect-video w-full bg-gray-200 shadow-xl">
+            <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
               <iframe
-                width="100%"
-                height="100%"
-                src="https://www.youtube.com/embed?listType=user_uploads&list=AKMC_NZ&index=0"
-                title="AKMC 최신 설교"
+                src={`https://www.youtube-nocookie.com/embed/${SERMON_VIDEO_ID}?rel=0`}
+                className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                className="w-full h-full"
               />
             </div>
           </div>
@@ -62,27 +61,22 @@ export default function AnnouncementSection() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-12">
             <h2
-              className="font-black uppercase text-blue-600 leading-none"
+              className="font-black uppercase text-gray-900 leading-none"
               style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
             >
               교회 소식
             </h2>
-            <Link href="/worship/news" className="text-black font-bold uppercase text-sm tracking-wide hover:text-blue-600 transition-colors">
+            <Link href="/worship/news" className="text-blue-600 font-bold hover:underline text-sm uppercase tracking-wider">
               전체 보기 →
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {newsItems.map((item, i) => (
-              <Link key={i} href={item.href} className="group block bg-gray-50 hover:bg-white border border-gray-200 hover:border-blue-600 hover:shadow-lg transition-all duration-300 p-8">
-                <p className="text-blue-600 text-xs font-bold uppercase tracking-widest mb-3">{item.date}</p>
-                <h3 className="font-black text-black text-xl mb-3 uppercase group-hover:text-blue-600 transition-colors" style={{ fontFamily: 'Impact, Arial Black, sans-serif' }}>
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
-                <div className="mt-6 flex items-center gap-2 text-black font-bold text-sm uppercase group-hover:text-blue-600 transition-colors">
-                  <span>자세히 보기</span>
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </div>
+              <Link key={i} href={item.href} className="group block border border-gray-200 hover:border-blue-500 transition-colors p-8">
+                <span className="text-xs uppercase tracking-widest text-blue-600 font-bold mb-3 block">{item.date}</span>
+                <h3 className="text-xl font-black text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">{item.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-6">{item.desc}</p>
+                <span className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">자세히 보기 →</span>
               </Link>
             ))}
           </div>
