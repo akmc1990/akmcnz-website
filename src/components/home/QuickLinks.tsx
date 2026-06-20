@@ -1,7 +1,15 @@
 import Link from 'next/link';
+import { IconType } from 'react-icons';
 import { FaChurch, FaBullhorn, FaImages, FaCross, FaMapMarkerAlt, FaEnvelope, FaYoutube } from 'react-icons/fa';
 
-const links = [
+interface QuickLink {
+    href: string;
+    icon: IconType;
+    label: string;
+    labelEn: string;
+}
+
+const links: QuickLink[] = [
   { href: '/about/service', icon: FaChurch, label: '예배 안내', labelEn: 'Services' },
   { href: '/worship/news', icon: FaBullhorn, label: '주보', labelEn: 'Bulletin' },
   { href: '/gallery', icon: FaImages, label: '사진/영상', labelEn: 'Gallery' },
@@ -22,7 +30,7 @@ export default function QuickLinks() {
                         </div>div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2">
                           {links.map((link) => {
-                        const Icon = link.icon;
+                        const Icon: IconType = link.icon;
                         return (
                                         <Link key={link.href} href={link.href}
                                                           className="group flex flex-col items-center justify-center p-6 border-2 border-gray-800 hover:border-blue-500 hover:bg-blue-600 transition-all">
