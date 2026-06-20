@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import { FaChurch, FaBullhorn, FaImages, FaCross, FaMapMarkerAlt, FaEnvelope, FaVideo } from 'react-icons/fa';
+import { FaChurch, FaBullhorn, FaImages, FaCross, FaMapMarkerAlt, FaEnvelope, FaYoutube } from 'react-icons/fa';
 
 const links = [
   { href: '/about/service', icon: FaChurch, label: '예배 안내', labelEn: 'Services' },
   { href: '/worship/news', icon: FaBullhorn, label: '주보', labelEn: 'Bulletin' },
   { href: '/gallery', icon: FaImages, label: '사진/영상', labelEn: 'Gallery' },
-  { href: '/worship/online', icon: FaVideo, label: '온라인 예배', labelEn: 'Online' },
+  { href: '/worship/online', icon: FaYoutube, label: '온라인 예배', labelEn: 'Online' },
   { href: '/mission', icon: FaCross, label: '선교', labelEn: 'Mission' },
   { href: '/directions', icon: FaMapMarkerAlt, label: '오시는 길', labelEn: 'Directions' },
   { href: '/contact', icon: FaEnvelope, label: 'Contact', labelEn: 'Contact Us' },
@@ -25,10 +25,10 @@ export default function QuickLinks() {
                         const Icon = link.icon;
                         return (
                                         <Link key={link.href} href={link.href}
-                                                          className="group flex flex-col items-center justify-center p-6 border-2 border-gray-800 hover:border-blue-500 hover:bg-blue-600 transition-all duration-200">
-                                                        <Icon className="w-8 h-8 text-blue-400 group-hover:text-white mb-3 transition-colors" />
+                                                          className="group flex flex-col items-center justify-center p-6 border-2 border-gray-800 hover:border-blue-500 hover:bg-blue-600 transition-all">
+                                                        <Icon className="w-8 h-8 text-blue-400 group-hover:text-white mb-3" />
                                                         <span className="font-black text-white text-xs uppercase tracking-wide text-center">{link.label}</span>span>
-                                                        <span className="text-gray-500 group-hover:text-white/70 text-xs mt-1 transition-colors">{link.labelEn}</span>span>
+                                                        <span className="text-gray-500 group-hover:text-white text-xs mt-1">{link.labelEn}</span>span>
                                         </Link>Link>
                                       );
           })}
