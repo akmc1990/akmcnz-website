@@ -33,8 +33,8 @@ export default function ContactPage() {
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="bg-church-navy text-white py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl font-bold mb-2">CONTACT</h1>
-          <p className="text-church-teal">문의하기</p>
+          <h1 className="text-3xl font-bold mb-2 text-black">CONTACT</h1>
+          <p className="text-black">문의하기</p>
         </div>
       </div>
 
@@ -149,7 +149,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full flex items-center justify-center gap-2 bg-church-teal hover:bg-teal-600 disabled:opacity-50 text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+                    className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 disabled:opacity-50 text-white py-3 px-6 rounded-lg font-semibold transition-colors"
                   >
                     {submitting ? <div className="spinner w-5 h-5 border-2" /> : <FiSend className="w-4 h-4" />}
                     {submitting ? '제출 중...' : '제출하기 Submit'}
