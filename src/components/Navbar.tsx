@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa'
 
@@ -36,31 +37,16 @@ const navItems: NavItem[] = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
-  const isHome = pathname === '/'
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   useEffect(() => { setIsOpen(false) }, [pathname])
 
-  const navBg = isHome && !scrolled ? 'bg-transparent' : 'bg-black'
-
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${navBg}`}>
+      <nav className="fixed top-0 left-0 right-0 z-50 transition-colors duration-300 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex items-center gap-2">
-            <div className="border-2 border-white p-1">
-              <div className="text-white font-black text-xs leading-tight text-center" style={{ fontFamily: 'Impact, Arial Black, sans-serif' }}>
-                <div>AKMC</div>
-                <div>교회</div>
-              </div>
-            </div>
+            <Image src="/logo.png" alt="AKMC 오클랜드 감리교회" width={80} height={80} className="h-16 w-16 md:h-20 md:w-20 object-contain" priority />
           </Link>
           <ul className="hidden md:flex items-center gap-6">
             {navItems.map((item) => (
@@ -68,15 +54,15 @@ export default function Navbar() {
                 {item.children ? (
                   <>
                     <button
-                      className="flex items-center gap-1 text-white font-bold uppercase text-sm tracking-wide hover:text-blue-400 transition-colors"
+                      className="flex items-center gap-1 text-black font-bold uppercase text-sm tracking-wide hover:text-blue-600 transition-colors"
                       onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
                     >
                       {item.label} <FaChevronDown className="text-xs" />
                     </button>
-                    <ul className="absolute top-full left-0 mt-1 bg-black min-w-max opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl">
+                    <ul className="absolute top-full left-0 mt-1 bg-white min-w-max opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl border border-gray-100">
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <Link href={child.href} className="block px-4 py-2 text-white text-sm hover:bg-blue-600 hover:text-white transition-colors whitespace-nowrap">
+                          <Link href={child.href} className="block px-4 py-2 text-black text-sm hover:bg-blue-600 hover:text-white transition-colors whitespace-nowrap">
                             {child.label}
                           </Link>
                         </li>
@@ -84,7 +70,7 @@ export default function Navbar() {
                     </ul>
                   </>
                 ) : (
-                  <Link href={item.href!} className="text-white font-bold uppercase text-sm tracking-wide hover:text-blue-400 transition-colors">
+                  <Link href={item.href!} className="text-black font-bold uppercase text-sm tracking-wide hover:text-blue-600 transition-colors">
                     {item.label}
                   </Link>
                 )}
@@ -92,7 +78,7 @@ export default function Navbar() {
             ))}
           </ul>
           <button
-            className="md:hidden text-white p-2"
+            className="md:hidden text-black p-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -101,13 +87,13 @@ export default function Navbar() {
         </div>
       </nav>
       {isOpen && (
-        <div className="fixed inset-0 z-40 bg-black flex flex-col pt-20 px-6 overflow-y-auto">
+        <div className="fixed inset-0 z-40 bg-white flex flex-col pt-20 px-6 overflow-y-auto">
           {navItems.map((item) => (
-            <div key={item.label} className="border-b border-gray-800">
+            <div key={item.label} className="border-b border-gray-200">
               {item.children ? (
                 <>
                   <button
-                    className="w-full flex items-center justify-between py-4 text-white font-black uppercase text-lg"
+                    className="w-full flex items-center justify-between py-4 text-black font-black uppercase text-lg"
                     onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
                   >
                     {item.label} <FaChevronDown className={`transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />
@@ -116,7 +102,7 @@ export default function Navbar() {
                     <ul className="pb-2 pl-4">
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <Link href={child.href} className="block py-2 text-gray-300 hover:text-white">
+                          <Link href={child.href} className="block py-2 text-gray-600 hover:text-black">
                             {child.label}
                           </Link>
                         </li>
@@ -125,7 +111,7 @@ export default function Navbar() {
                   )}
                 </>
               ) : (
-                <Link href={item.href!} className="block py-4 text-white font-black uppercase text-lg">
+                <Link href={item.href!} className="block py-4 text-black font-black uppercase text-lg">
                   {item.label}
                 </Link>
               )}

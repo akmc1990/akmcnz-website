@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const YOUTUBE_HANDLE = 'akmcnz';
+const FALLBACK_CHANNEL_ID = 'UCuXOmcLxWGadVq2v5OQ0bVQ';
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
 // Fetches the most recent live or completed live video ID from the AKMC YouTube channel
@@ -33,16 +34,16 @@ export async function GET() {
 
 async function getChannelId(): Promise<string | null> {
       try {
-              // Try channel_id-based RSS (most reliable)
-        const handleUrl = `https://www.youtube.com/feeds/videos.xml?user=${YOUTUBE_HANDLE}`;
-              const res = await fetch(handleUrl, { next: { revalidate: 86400 } });
-              if (!res.ok) return null;
+              // Handles (@akmcnz) aren't resolvable via the legacy ?user= RSS endpoint,
+        // so scrape the channel page for its underlying UC... channel ID instead.
+        const res = await fetch(`https://www.youtube.com/@${YOUTUBE_HANDLE}`, { next: { revalidate: 86400 } });
+              if (!res.ok) return FALLBACK_CHANNEL_ID;
 
-        const xml = await res.text();
-              const match = xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/);
-              return match ? match[1] : null;
+        const html = await res.text();
+              const match = html.match(/"channelId":"(UC[^"]+)"/) || html.match(/channel\/(UC[A-Za-z0-9_-]+)/);
+              return match ? match[1] : FALLBACK_CHANNEL_ID;
       } catch {
-              return null;
+              return FALLBACK_CHANNEL_ID;
       }
 }
 
@@ -69,9 +70,8 @@ async function fetchFromYouTubeAPI(
 async function fetchLatestFromRSS(channelId: string | null): Promise<string | null> {
       try {
               const urls = [
-                        channelId ? `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}` : null,
-                        `https://www.youtube.com/feeds/videos.xml?user=${YOUTUBE_HANDLE}`,
-                      ].filter(Boolean) as string[];
+                        `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId ?? FALLBACK_CHANNEL_ID}`,
+                      ];
 
         for (const url of urls) {
                   const res = await fetch(url, { next: { revalidate: 3600 } });

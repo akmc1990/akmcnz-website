@@ -1,3 +1,6 @@
+
+
+
 import Link from 'next/link'
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaYoutube, FaFacebook, FaInstagram } from 'react-icons/fa'
 
@@ -25,7 +28,7 @@ export default function Footer() {
             >
               함께 예배드려요
             </h2>
-            <p className="text-black text-sm mt-1">오클랜드감리교회에서 당신의 자리가 기다립니다.</p>
+            <p className="text-black text-sm mt-1">오클랜드 감리교회에서 당신의 자리를 기다립니다.</p>
             <p className="text-white text-xs leading-relaxed mt-24">
               뉴질랜드 오클랜드감리교회<br />
               Auckland Korean Methodist Church
@@ -46,7 +49,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h3 className="font-black uppercase text-black text-10 tracking-widest mb-3">빠른 링크</h3>
+            <h3 className="uppercase text-white text-10 tracking-widest mb-3">빠른 링크</h3>
             <ul className="space-y-1.5">
               {footerLinks.map((link) => (
                 <li key={link.href}>
@@ -58,7 +61,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-black uppercase text-black text-10 tracking-widest mb-3">연락처</h3>
+            <h3 className="uppercase text-white text-10 tracking-widest mb-3">연락처</h3>
             <div className="space-y-2">
               <div className="flex items-start gap-3">
                 <FaMapMarkerAlt className="text-blue-500 mt-1 flex-shrink-0" />
