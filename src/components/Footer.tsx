@@ -23,12 +23,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <h2
-              className="font-black uppercase text-black leading-none"
+              className="font-black uppercase text-white leading-none"
               style={{ fontSize: 'clamp(1rem, 1.6vw, 1.4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
             >
               함께 예배드려요
             </h2>
-            <p className="text-black text-sm mt-1">오클랜드 감리교회에서 당신의 자리를 기다립니다.</p>
+            <p className="text-white text-sm mt-1">오클랜드 감리교회에서 당신의 자리를 기다립니다.</p>
             <p className="text-white text-xs leading-relaxed mt-24">
               뉴질랜드 오클랜드감리교회<br />
               Auckland Korean Methodist Church

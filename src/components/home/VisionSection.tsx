@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 const visions = [
   {
     titleKo: '예배를 최우선으로 삼는 교회',
@@ -35,7 +33,7 @@ const visions = [
 
 export default function VisionSection() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-4 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-16">
           <h2
@@ -62,14 +60,6 @@ export default function VisionSection() {
               <p className="text-gray-600 text-sm leading-relaxed">{v.description}</p>
             </div>
           ))}
-        </div>
-        <div className="mt-10">
-          <Link
-            href="/about/vision"
-            className="inline-block px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-sm border-2 border-black hover:bg-transparent hover:text-black transition-all duration-200"
-          >
-            교회 비전 더 보기
-          </Link>
         </div>
       </div>
     </section>

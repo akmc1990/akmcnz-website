@@ -19,14 +19,10 @@ export default function OnlineWorshipPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
-      <div className="bg-church-navy text-white py-12">
+      <div className="bg-church-navy text-black py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-3">실시간 / 온라인 예배</h1>
-          <p className="text-church-teal text-lg">Live & Online Worship</p>
-          <p className="text-white/70 mt-2 text-sm">
-            모든 사역의 시작과 끝, 예배를 최우선으로 삼는 공동체<br />
-            Worship First: The foundation and crown of every ministry.
-          </p>
+          <p className="text-black text-lg">Live & Online Worship</p>
         </div>
       </div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -81,16 +77,21 @@ export default function OnlineWorshipPage() {
             )}
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-          <h2 className="font-bold text-church-navy mb-4 text-lg">YouTube 채널 바로가기</h2>
-          <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 bg-church-navy hover:bg-church-teal text-white px-6 py-3 rounded-xl font-semibold transition-colors">
-            <FiYoutube className="w-6 h-6" />
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-8">
+          <h2 className="font-bold text-church-navy mb-2 text-base">YouTube 채널 바로가기</h2>
+          <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-church-navy hover:bg-church-teal text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+            <FiYoutube className="w-4 h-4" />
             오클랜드감리교회 유튜브 채널 바로가기
-            <FiExternalLink className="w-4 h-4" />
+            <FiExternalLink className="w-3 h-3" />
           </a>
+          <p className="mt-2">
+            <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-base font-bold hover:underline">
+              {YOUTUBE_CHANNEL_URL}
+            </a>
+          </p>
         </div>
         <div className="bg-church-cream rounded-xl border border-church-gold/30 p-6">
-          <h3 className="font-bold text-church-navy mb-3">인터넷 뱅킹 헌금 코드 안내</h3>
+          <h3 className="font-bold text-church-navy mb-3">온라인 헌금 안내</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             {[
               { code: '1', label: '십일조' },
@@ -102,7 +103,7 @@ export default function OnlineWorshipPage() {
               { code: '7', label: '절기헌금' },
             ].map(item => (
               <div key={item.code} className="flex items-center gap-2 bg-white rounded-lg p-3 border border-gray-100">
-                <span className="w-7 h-7 bg-church-teal text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">{item.code}</span>
+                <span className="w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">{item.code}</span>
                 <span className="text-sm font-medium text-gray-700">{item.label}</span>
               </div>
             ))}
