@@ -1,21 +1,13 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import { FiYoutube, FiBell, FiExternalLink } from 'react-icons/fi'
+import { getLatestVideo, getRecentVideos } from '@/lib/youtube'
 
 const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@akmcnz'
 
-export default function OnlineWorshipPage() {
-  const [latestVideoId, setLatestVideoId] = useState<string | null>(null)
-
-  useEffect(() => {
-    fetch('/api/youtube-latest')
-      .then(res => res.json())
-      .then(data => {
-        if (data.videoId) setLatestVideoId(data.videoId)
-      })
-      .catch(() => {})
-  }, [])
+export default async function OnlineWorshipPage() {
+  const [{ videoId: latestVideoId }, recentVideos] = await Promise.all([
+    getLatestVideo(),
+    getRecentVideos(5),
+  ])
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -68,7 +60,7 @@ export default function OnlineWorshipPage() {
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 gap-3">
                 <FiYoutube className="w-12 h-12 text-red-500" />
-                <p className="text-gray-500 text-sm">영상을 불러오는 중입니다...</p>
+                <p className="text-gray-500 text-sm">영상을 불러올 수 없습니다.</p>
                 <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
                   <FiYoutube className="w-4 h-4" />
                   YouTube 채널에서 보기
@@ -76,6 +68,38 @@ export default function OnlineWorshipPage() {
               </div>
             )}
           </div>
+          {recentVideos.length > 0 && (
+            <div className="p-4 border-t border-gray-100">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                {recentVideos.map(video => (
+                  <a
+                    key={video.videoId}
+                    href={`https://www.youtube.com/watch?v=${video.videoId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block"
+                  >
+                    <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <img
+                        src={`https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`}
+                        alt={video.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <p className="mt-1.5 text-xs text-gray-600 line-clamp-2 group-hover:text-church-teal">{video.title}</p>
+                  </a>
+                ))}
+              </div>
+              <a
+                href={YOUTUBE_CHANNEL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 flex items-center justify-center gap-1 text-church-teal text-sm font-semibold hover:underline"
+              >
+                더보기 <FiExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
         </div>
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-8">
           <h2 className="font-bold text-church-navy mb-2 text-base">YouTube 채널 바로가기</h2>

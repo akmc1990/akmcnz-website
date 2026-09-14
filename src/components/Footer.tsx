@@ -2,7 +2,7 @@
 
 
 import Link from 'next/link'
-import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaYoutube, FaFacebook, FaInstagram } from 'react-icons/fa'
+import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaYoutube, FaInstagram } from 'react-icons/fa'
 
 const footerLinks = [
   { label: '교회소개', href: '/about/vision' },
@@ -40,10 +40,7 @@ export default function Footer() {
               <a href="https://youtube.com/@AKMCNZ" target="_blank" rel="noopener noreferrer" className="text-gray-100 hover:text-white transition-colors">
                 <FaYoutube size={18} />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-100 hover:text-white transition-colors">
-                <FaFacebook size={18} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-100 hover:text-white transition-colors">
+              <a href="https://www.instagram.com/akmc_inchrist" target="_blank" rel="noopener noreferrer" className="text-gray-100 hover:text-white transition-colors">
                 <FaInstagram size={18} />
               </a>
             </div>

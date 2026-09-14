@@ -40,8 +40,9 @@ export default function HeroSection() {
           </div>
         )}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <Link href="/about/service" className="px-8 py-4 text-base font-black tracking-widest bg-black text-white border-2 border-black hover:bg-transparent hover:text-black transition-all duration-200">예배 안내 SERVICES</Link>
+          <Link href="/about/service" className="px-8 py-4 text-base font-black tracking-widest text-black border-2 border-black hover:bg-black hover:text-white transition-all duration-200">예배 안내 SERVICES</Link>
           <Link href="/worship/online" className="px-8 py-4 text-base font-black tracking-widest border-2 border-black text-black hover:bg-black hover:text-white transition-all duration-200">온라인 예배 ONLINE</Link>
+          <a href="https://www.instagram.com/akmc_inchrist" target="_blank" rel="noopener noreferrer" className="px-8 py-4 text-base font-black tracking-widest border-2 border-black text-black hover:bg-black hover:text-white transition-all duration-200">인스타그램 INSTAGRAM</a>
         </div>
         <div className="flex justify-center gap-2 mb-8">
           {slides.map((_, i) => (

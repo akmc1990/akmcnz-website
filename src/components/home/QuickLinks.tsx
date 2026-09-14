@@ -5,17 +5,17 @@ const locations = [
   {
     name: '오클랜드감리교회',
     nameEn: 'Auckland Korean Methodist Church',
-    address: '오클랜드, 뉴질랜드',
-    times: '주일 오전 11:00',
-    img: 'https://images.unsplash.com/photo-1438232992991-995b671e4668?w=600&q=80',
+    address: 'Takapuna, Auckland, New Zealand',
+    times: '주일 오후 1:00',
+    img: '/church-building.png',
     href: '/directions',
   },
   {
     name: '온라인 예배',
     nameEn: 'Online Service',
     address: 'YouTube & Streaming',
-    times: '주일 오전 11:00',
-    img: 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=600&q=80',
+    times: '주일 오후 1:00',
+    img: '/online-worship.png',
     href: '/worship/online',
   },
   {
@@ -23,7 +23,7 @@ const locations = [
     nameEn: 'Small Group Meetings',
     address: '다양한 장소',
     times: '주중 일정 문의',
-    img: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=80',
+    img: '/small-group.jpg',
     href: '/worship/nurture',
   },
 ]

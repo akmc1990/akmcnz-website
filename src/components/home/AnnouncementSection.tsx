@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getLatestVideo } from '@/lib/youtube'
 
 const newsItems = [
   {
@@ -21,9 +22,11 @@ const newsItems = [
   },
 ]
 
-const SERMON_VIDEO_ID = 'Z87UiFjE-us'
+const FALLBACK_SERMON_VIDEO_ID = 'Z87UiFjE-us'
 
-export default function AnnouncementSection() {
+export default async function AnnouncementSection() {
+  const { videoId } = await getLatestVideo()
+  const sermonVideoId = videoId ?? FALLBACK_SERMON_VIDEO_ID
   return (
     <>
       <section className="py-24 bg-gray-50">
@@ -40,7 +43,7 @@ export default function AnnouncementSection() {
                 하나님의 말씀을 통해 소망과 진리, 그리고 이번 주 당신을 위한 격려를 경험하세요.
               </p>
               <Link
-                href="/gallery"
+                href="/worship/online"
                 className="inline-block bg-black text-white font-black uppercase tracking-widest px-8 py-4 text-sm hover:bg-blue-700 transition-colors"
               >
                 설교 영상 더 보기
@@ -48,7 +51,7 @@ export default function AnnouncementSection() {
             </div>
             <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
               <iframe
-                src={`https://www.youtube-nocookie.com/embed/${SERMON_VIDEO_ID}?rel=0`}
+                src={`https://www.youtube-nocookie.com/embed/${sermonVideoId}?rel=0`}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
