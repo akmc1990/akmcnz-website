@@ -1,11 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
-interface CardImage { url: string; public_id: string; }
-interface CardNewsEntry { date: string; images: CardImage[]; }
+interface CardNewsEntry { date: string; url: string; public_id: string; }
 
 export default function NewsPage() {
   const { data: session } = useSession();
@@ -14,12 +12,11 @@ export default function NewsPage() {
   const [list, setList] = useState<CardNewsEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [currentIdx, setCurrentIdx] = useState(0);
   const [deleting, setDeleting] = useState<string | null>(null);
 
   const [showUpload, setShowUpload] = useState(false);
   const [uploadDate, setUploadDate] = useState('');
-  const [uploadFiles, setUploadFiles] = useState<File[]>([]);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,21 +31,18 @@ export default function NewsPage() {
         const d = await res.json();
         const entries: CardNewsEntry[] = d.cardnews || [];
         setList(entries);
-        if (entries.length > 0) { setSelectedDate(entries[0].date); setCurrentIdx(0); }
+        if (entries.length > 0) { setSelectedDate(entries[0].date); }
       }
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
 
   const selectedEntry = list.find(e => e.date === selectedDate) || null;
-  const images = selectedEntry?.images || [];
 
-  const handlePrev = () => setCurrentIdx(i => Math.max(0, i - 1));
-  const handleNext = () => setCurrentIdx(i => Math.min(images.length - 1, i + 1));
-  const handleSelectDate = (date: string) => { setSelectedDate(date); setCurrentIdx(0); };
+  const handleSelectDate = (date: string) => { setSelectedDate(date); };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploadFiles(Array.from(e.target.files || []));
+    setUploadFile(e.target.files?.[0] || null);
     setUploadError('');
   };
 
@@ -56,19 +50,19 @@ export default function NewsPage() {
     e.preventDefault();
     setUploadError('');
     if (!uploadDate) { setUploadError('날짜를 입력해주세요.'); return; }
-    if (uploadFiles.length === 0) { setUploadError('이미지 파일을 선택해주세요.'); return; }
+    if (!uploadFile) { setUploadError('PDF 파일을 선택해주세요.'); return; }
 
     setUploading(true);
     try {
       const formData = new FormData();
       formData.append('date', uploadDate);
-      uploadFiles.forEach(f => formData.append('files', f));
+      formData.append('file', uploadFile);
 
       const res = await fetch('/api/upload-cardnews', { method: 'POST', body: formData });
       if (res.ok) {
         setShowUpload(false);
         setUploadDate('');
-        setUploadFiles([]);
+        setUploadFile(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
         await fetchList();
       } else {
@@ -133,11 +127,11 @@ export default function NewsPage() {
                     className="w-full border rounded-lg px-3 py-2 text-sm" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">이미지 파일 (여러 장 선택 가능)</label>
-                  <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleFileChange}
+                  <label className="block text-sm font-medium text-gray-700 mb-1">주보 PDF 파일</label>
+                  <input ref={fileInputRef} type="file" accept="application/pdf" onChange={handleFileChange}
                     className="w-full text-sm" required />
-                  {uploadFiles.length > 0 && (
-                    <p className="text-xs text-gray-500 mt-1">{uploadFiles.length}개 파일 선택됨</p>
+                  {uploadFile && (
+                    <p className="text-xs text-gray-500 mt-1">{uploadFile.name}</p>
                   )}
                 </div>
                 {uploadError && <p className="text-red-500 text-sm">{uploadError}</p>}
@@ -159,45 +153,25 @@ export default function NewsPage() {
           <p className="text-center text-gray-400 py-20">등록된 주보가 없습니다.</p>
         ) : (
           <div className="flex flex-col md:flex-row gap-6">
-            {/* Slideshow */}
+            {/* PDF viewer */}
             <div className="flex-1">
-              <h2 className="text-lg font-semibold text-church-gold mb-4">{selectedDate}</h2>
-              {images.length > 0 ? (
-                <>
-                  {/* Main image */}
-                  <div className="relative bg-white rounded-2xl shadow overflow-hidden" style={{ aspectRatio: '3/4' }}>
-                    <Image src={images[currentIdx]?.url} alt={`슬라이드 ${currentIdx + 1}`}
-                      fill className="object-contain" sizes="600px" />
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-church-gold">{selectedDate}</h2>
+                {selectedEntry && (
+                  <div className="flex gap-3 text-sm">
+                    <a href={selectedEntry.url} target="_blank" rel="noopener noreferrer"
+                      className="text-church-teal hover:underline">새 탭에서 보기</a>
+                    <a href={selectedEntry.url} download
+                      className="text-church-teal hover:underline">다운로드</a>
                   </div>
-                  {/* Navigation */}
-                  {images.length > 1 && (
-                    <>
-                      <div className="flex items-center justify-center gap-4 mt-4 w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition">
-                        <button onClick={handlePrev} disabled={currentIdx === 0}
-                          className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition disabled:opacity-30">
-                          ‹
-                        </button>
-                        <span className="text-sm text-gray-500">{currentIdx + 1} / {images.length}</span>
-                        <button onClick={handleNext} disabled={currentIdx === images.length - 1}
-                          className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition disabled:opacity-30">
-                          ›
-                        </button>
-                      </div>
-                      {/* Thumbnails */}
-                      <div className="flex gap-2 mt-4 overflow-x-auto pb-2 justify-center">
-                        {images.map((img, i) => (
-                          <button key={i} onClick={() => setCurrentIdx(i)}
-                            className={`relative flex-shrink-0 rounded-lg overflow-hidden border-2 transition ${currentIdx === i ? 'border-church-gold' : 'border-gray-200'}`}
-                            style={{ width: 56, height: 72 }}>
-                            <Image src={img.url} alt={`썸네일 ${i + 1}`} fill className="object-cover" sizes="56px" />
-                          </button>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </>
+                )}
+              </div>
+              {selectedEntry ? (
+                <div className="bg-white rounded-2xl shadow overflow-hidden" style={{ height: '80vh' }}>
+                  <iframe src={selectedEntry.url} title={`${selectedDate} 주보`} className="w-full h-full border-0" />
+                </div>
               ) : (
-                <p className="text-gray-400 text-center py-10">이미지가 없습니다.</p>
+                <p className="text-gray-400 text-center py-10">PDF가 없습니다.</p>
               )}
             </div>
 
@@ -210,7 +184,6 @@ export default function NewsPage() {
                     <button onClick={() => handleSelectDate(entry.date)}
                       className={`flex-1 text-left px-3 py-2 rounded-lg text-sm transition ${selectedDate === entry.date ? 'bg-gray-100 font-semibold text-church-navy' : 'hover:bg-gray-50 text-gray-700'}`}>
                       {entry.date}
-                      <span className="block text-xs text-gray-400">{entry.images.length}장</span>
                     </button>
                     {isAdmin && (
                       <button onClick={() => handleDelete(entry.date)} disabled={deleting === entry.date}

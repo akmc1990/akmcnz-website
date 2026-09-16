@@ -26,7 +26,7 @@ export async function DELETE(request: NextRequest) {
       // List all images with this prefix (no trailing slash to match all)
       const existing = await cloudinary.api.resources({
               type: 'upload',
-              resource_type: 'image',
+              resource_type: 'raw',
               prefix: folder,
               max_results: 500,
       });
@@ -34,7 +34,7 @@ export async function DELETE(request: NextRequest) {
       let deleted = 0;
         if (existing.resources.length > 0) {
                 const ids = existing.resources.map((r: { public_id: string }) => r.public_id);
-                await cloudinary.api.delete_resources(ids);
+                await cloudinary.api.delete_resources(ids, { resource_type: 'raw' });
                 deleted = ids.length;
         }
 

@@ -28,7 +28,7 @@ export default function DirectionsPage() {
         <div>
           <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3193.2!2d174.7750!3d-36.7900!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6d0d4833b1e7a1b5%3A0x1234567890!2s427+Lake+Road%2C+Takapuna%2C+Auckland+0622%2C+New+Zealand!5e0!3m2!1sen!2snz!4v1000000000000"
+              src="https://www.google.com/maps?q=427+Lake+Road,+Takapuna,+Auckland+0622,+New+Zealand&output=embed"
               className="absolute inset-0 w-full h-full border-0"
               allowFullScreen
               loading="lazy"

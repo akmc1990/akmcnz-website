@@ -22,6 +22,7 @@ const navItems: NavItem[] = [
     { href: '/about/vision', label: '교회 비전' },
     { href: '/about/history', label: '교회 연혁' },
     { href: '/about/service', label: '예배 안내' },
+    { href: '/about/staff', label: '교역자 소개' },
   ]},
   { label: '예배와 양육', children: [
     { href: '/worship/online', label: '실시간/온라인 예배' },

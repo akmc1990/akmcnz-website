@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { FiSend, FiMapPin, FiPhone, FiMail, FiCheck } from 'react-icons/fi'
+import { FaInstagram } from 'react-icons/fa'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', address: '', phone: '', message: '' })
@@ -71,6 +72,17 @@ export default function ContactPage() {
                 <div>
                   <p className="font-semibold text-church-navy mb-1">이메일</p>
                   <a href="mailto:admin@akmcnz.org" className="text-gray-600 text-sm hover:text-church-teal">admin@akmcnz.org</a>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <FaInstagram className="w-5 h-5 text-church-teal" />
+                </div>
+                <div>
+                  <p className="font-semibold text-church-navy mb-1">인스타그램</p>
+                  <a href="https://www.instagram.com/akmc_inchrist" target="_blank" rel="noopener noreferrer" className="text-gray-600 text-sm hover:text-church-teal">@akmc_inchrist</a>
                 </div>
               </div>
             </div>

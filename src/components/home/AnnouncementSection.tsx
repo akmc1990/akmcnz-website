@@ -4,7 +4,7 @@ import YouTubeEmbed from '@/components/YouTubeEmbed'
 
 const newsItems = [
   {
-    title: '2024 교회 주보',
+    title: '교회 주보',
     desc: '매주 주일 예배 순서 및 교회 공지사항을 확인하세요.',
     href: '/worship/news',
     date: '매주 업데이트',
@@ -35,7 +35,7 @@ export default async function AnnouncementSection() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2
-                className="font-black uppercase text-blue-600 leading-none mb-6"
+                className="font-black uppercase text-[#3d5d96] leading-none mb-6"
                 style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
               >
                 최신 설교
@@ -60,22 +60,22 @@ export default async function AnnouncementSection() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-12">
             <h2
-              className="font-black uppercase text-gray-900 leading-none"
+              className="font-black uppercase text-[#3d5d96] leading-none"
               style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
             >
               교회 소식
             </h2>
-            <Link href="/worship/news" className="text-blue-600 font-bold hover:underline text-sm uppercase tracking-wider">
+            <Link href="/worship/news" className="text-[#3d5d96] font-bold hover:underline text-sm uppercase tracking-wider">
               전체 보기 →
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {newsItems.map((item, i) => (
-              <Link key={i} href={item.href} className="group block border border-gray-200 hover:border-blue-500 transition-colors p-8">
-                <span className="text-xs uppercase tracking-widest text-blue-600 font-bold mb-3 block">{item.date}</span>
-                <h3 className="text-xl font-black text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">{item.title}</h3>
+              <Link key={i} href={item.href} className="group block border border-gray-200 hover:border-[#3d5d96] transition-colors p-8">
+                <span className="text-xs uppercase tracking-widest text-[#3d5d96] font-bold mb-3 block">{item.date}</span>
+                <h3 className="text-xl font-black text-gray-900 mb-3 group-hover:text-[#3d5d96] transition-colors">{item.title}</h3>
                 <p className="text-gray-600 text-sm leading-relaxed mb-6">{item.desc}</p>
-                <span className="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors">자세히 보기 →</span>
+                <span className="text-sm font-bold text-gray-900 group-hover:text-[#3d5d96] transition-colors">자세히 보기 →</span>
               </Link>
             ))}
           </div>

@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { FaMapMarkerAlt, FaClock } from 'react-icons/fa'
 
@@ -7,7 +8,7 @@ const locations = [
     nameEn: 'Auckland Korean Methodist Church',
     address: 'Takapuna, Auckland, New Zealand',
     times: '주일 오후 1:00',
-    img: '/church-building.png',
+    img: '/church-building.jpg',
     href: '/directions',
   },
   {
@@ -15,7 +16,7 @@ const locations = [
     nameEn: 'Online Service',
     address: 'YouTube & Streaming',
     times: '주일 오후 1:00',
-    img: '/online-worship.png',
+    img: '/online-worship.jpg',
     href: '/worship/online',
   },
   {
@@ -35,7 +36,7 @@ export default function QuickLinks() {
         <div className="flex items-end justify-between mb-12">
           <div>
             <h2
-              className="font-black uppercase text-blue-600 leading-none mb-3"
+              className="font-black uppercase text-[#3d5d96] leading-none mb-3"
               style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
             >
               예배 안내
@@ -51,11 +52,13 @@ export default function QuickLinks() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {locations.map((loc, i) => (
             <Link key={i} href={loc.href} className="group block bg-gray-50 hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-600">
-              <div className="h-52 overflow-hidden">
-                <img
+              <div className="relative h-52 overflow-hidden">
+                <Image
                   src={loc.img}
                   alt={loc.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
               <div className="p-6">

@@ -12,33 +12,20 @@ export async function GET() {
   try {
     const result = await cloudinary.api.resources({
       type: 'upload',
-      resource_type: 'image',
+      resource_type: 'raw',
       prefix: 'akmcnz-cardnews/',
       max_results: 500,
     });
 
-    // Group images by date folder (akmcnz-cardnews/YYYY-MM-DD/001, ...)
-    const dateMap = new Map<string, { date: string; images: { url: string; public_id: string }[] }>();
-
-    for (const r of result.resources) {
-      const parts = r.public_id.split('/');
-      if (parts.length < 3) continue;
-      const date = parts[1];
-
-      if (!dateMap.has(date)) {
-        dateMap.set(date, { date, images: [] });
-      }
-      dateMap.get(date)!.images.push({ url: r.secure_url, public_id: r.public_id });
-    }
-
-    // Sort images within each date by public_id ascending (00 first, then 01, 02, ...)
-    // and sort dates descending (newest date first)
-    const cardnews = Array.from(dateMap.values())
-      .map(entry => ({
-        ...entry,
-        images: entry.images.sort((a, b) => a.public_id.localeCompare(b.public_id)),
-      }))
-      .sort((a, b) => b.date.localeCompare(a.date));
+    // One PDF per date folder (akmcnz-cardnews/YYYY-MM-DD/bulletin.pdf)
+    const cardnews = result.resources
+      .map((r: { public_id: string; secure_url: string }) => {
+        const parts = r.public_id.split('/');
+        if (parts.length < 3) return null;
+        return { date: parts[1], url: r.secure_url, public_id: r.public_id };
+      })
+      .filter((e: { date: string; url: string; public_id: string } | null): e is { date: string; url: string; public_id: string } => e !== null)
+      .sort((a: { date: string }, b: { date: string }) => b.date.localeCompare(a.date));
 
     return NextResponse.json({ cardnews });
   } catch (error) {
