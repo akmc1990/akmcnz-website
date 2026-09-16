@@ -7,7 +7,8 @@ const locations = [
     name: '오클랜드감리교회',
     nameEn: 'Auckland Korean Methodist Church',
     address: 'Takapuna, Auckland, New Zealand',
-    times: '주일 오후 1:00',
+    timesLabel: '주일예배',
+    times: ['오전 11:20', '오후 1:00'],
     img: '/church-building.jpg',
     href: '/directions',
   },
@@ -15,7 +16,8 @@ const locations = [
     name: '온라인 예배',
     nameEn: 'Online Service',
     address: 'YouTube & Streaming',
-    times: '주일 오후 1:00',
+    timesLabel: '주일예배',
+    times: ['오전 11:20', '오후 1:00'],
     img: '/online-worship.jpg',
     href: '/worship/online',
   },
@@ -23,7 +25,8 @@ const locations = [
     name: '소그룹 모임',
     nameEn: 'Small Group Meetings',
     address: '다양한 장소',
-    times: '주중 일정 문의',
+    timesLabel: null,
+    times: ['주중 일정 문의'],
     img: '/small-group.jpg',
     href: '/worship/nurture',
   },
@@ -73,9 +76,16 @@ export default function QuickLinks() {
                   <FaMapMarkerAlt className="text-blue-600 flex-shrink-0" />
                   <span>{loc.address}</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-600 text-sm mb-4">
-                  <FaClock className="text-blue-600 flex-shrink-0" />
-                  <span className="font-bold uppercase text-xs tracking-wide">{loc.times}</span>
+                <div className="flex items-start gap-2 text-gray-600 text-sm mb-4">
+                  <FaClock className="text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    {loc.timesLabel && (
+                      <span className="block font-bold uppercase text-xs tracking-wide">{loc.timesLabel}</span>
+                    )}
+                    {loc.times.map((t, idx) => (
+                      <span key={idx} className={`block text-xs tracking-wide ${loc.timesLabel ? '' : 'font-bold uppercase'}`}>{t}</span>
+                    ))}
+                  </div>
                 </div>
                 <div className="flex items-center gap-2 text-black font-bold text-sm uppercase group-hover:text-blue-600 transition-colors">
                   <span>자세히 보기</span>
