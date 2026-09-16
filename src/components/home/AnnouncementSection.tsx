@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getLatestVideo } from '@/lib/youtube'
+import YouTubeEmbed from '@/components/YouTubeEmbed'
 
 const newsItems = [
   {
@@ -50,12 +51,7 @@ export default async function AnnouncementSection() {
               </Link>
             </div>
             <div className="aspect-video rounded-lg overflow-hidden shadow-xl">
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${sermonVideoId}?rel=0`}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              <YouTubeEmbed videoId={sermonVideoId} title="오클랜드감리교회 최신 설교" />
             </div>
           </div>
         </div>

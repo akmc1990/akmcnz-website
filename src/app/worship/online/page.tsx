@@ -1,13 +1,15 @@
 import { FiYoutube, FiBell, FiExternalLink } from 'react-icons/fi'
 import { getLatestVideo, getRecentVideos } from '@/lib/youtube'
+import YouTubeEmbed from '@/components/YouTubeEmbed'
 
 const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@akmcnz'
 
 export default async function OnlineWorshipPage() {
-  const [{ videoId: latestVideoId }, recentVideos] = await Promise.all([
+  const [{ videoId: latestVideoId }, allRecentVideos] = await Promise.all([
     getLatestVideo(),
-    getRecentVideos(5),
+    getRecentVideos(6),
   ])
+  const recentVideos = allRecentVideos.filter(v => v.videoId !== latestVideoId).slice(0, 5)
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -50,13 +52,7 @@ export default async function OnlineWorshipPage() {
           </div>
           <div className="aspect-video">
             {latestVideoId ? (
-              <iframe
-                src={'https://www.youtube.com/embed/' + latestVideoId}
-                title="오클랜드감리교회 최근 예배 영상"
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              <YouTubeEmbed videoId={latestVideoId} title="오클랜드감리교회 최근 예배 영상" />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 gap-3">
                 <FiYoutube className="w-12 h-12 text-red-500" />

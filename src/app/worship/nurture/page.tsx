@@ -79,7 +79,7 @@ const programs = [
 
 export default function NurturePage() {
   return (
-    <div className="min-h-screen bg-church-light">
+    <div className="min-h-screen bg-church-light pt-20">
       {/* Hero */}
       <div className="bg-church-navy py-16 text-center">
         <FaBook className="text-church-gold text-5xl mx-auto mb-4" />
@@ -90,11 +90,11 @@ export default function NurturePage() {
         </p>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-12">
+      <div className="max-w-4xl mx-auto px-4 pt-6 pb-12 space-y-12">
         {programs.map((program, idx) => {
           const Icon = program.icon;
           return (
-            <div key={idx} className="bg-white rounded-2xl shadow-md overflow-hidden">
+            <div key={idx} className="bg-white rounded-2xl shadow-md overflow-hidden border border-black">
               <div className={`bg-${program.color} px-6 py-5 flex items-center gap-3`}>
                 <Icon className="text-white text-2xl" />
                 <div>
@@ -124,12 +124,22 @@ export default function NurturePage() {
           <FaBook className="text-church-gold text-3xl mx-auto mb-3" />
           <h3 className="font-bold text-church-navy text-lg mb-2">프로그램 참여 문의</h3>
           <p className="text-gray-600 text-sm mb-4">양육 및 훈련 프로그램에 대한 자세한 정보는 교회에 문의해 주세요.</p>
-          <a
-            href="mailto:admin@akmcnz.org"
-            className="inline-block bg-church-navy text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-900 transition-colors"
-          >
-            문의하기
-          </a>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="mailto:admin@akmcnz.org"
+              className="inline-block bg-[#3d5d96] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#32497a] transition-colors"
+            >
+              이메일 문의
+            </a>
+            <a
+              href="https://www.instagram.com/akmc_inchrist"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-[#3d5d96] text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-[#32497a] transition-colors"
+            >
+              인스타그램
+            </a>
+          </div>
         </div>
       </div>
     </div>
