@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { FiChevronDown } from 'react-icons/fi'
 
@@ -27,7 +28,14 @@ export default function HeroSection() {
   const slide: Slide = slides[current] ?? slides[0]
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      <img src={slide.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <Image
+        src={slide.image}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+      />
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
         <p className="text-white/70 text-xl mb-4" style={{fontFamily: 'cursive', fontStyle: 'italic'}}>Welcome to</p>

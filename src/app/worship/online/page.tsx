@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { FiYoutube, FiBell, FiExternalLink } from 'react-icons/fi'
 import { getLatestVideo, getRecentVideos } from '@/lib/youtube'
 import YouTubeEmbed from '@/components/YouTubeEmbed'
@@ -75,11 +76,13 @@ export default async function OnlineWorshipPage() {
                     rel="noopener noreferrer"
                     className="group block"
                   >
-                    <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
-                      <img
+                    <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <Image
                         src={`https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`}
                         alt={video.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        sizes="(max-width: 640px) 50vw, 20vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                     <p className="mt-1.5 text-xs text-gray-600 line-clamp-2 group-hover:text-church-teal">{video.title}</p>

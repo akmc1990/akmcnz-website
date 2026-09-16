@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function MissionPage() {
   const missions = [
     { year: '2023', title: '4차 피지단기선교', desc: '4차 피지선교 보고영상 쌍기타 고니티의 (시어머니) 무릎 걱가, 미음고 바코아이 (남편) 수친 장애 친부, 비긴 끄따...', img: null },
@@ -32,8 +34,8 @@ export default function MissionPage() {
               </div>
               <div className="p-5">
                 {m.img ? (
-                  <div className="aspect-video bg-gray-100 rounded-lg mb-4 overflow-hidden">
-                    <img src={m.img} alt={m.title} className="w-full h-full object-cover" />
+                  <div className="relative aspect-video bg-gray-100 rounded-lg mb-4 overflow-hidden">
+                    <Image src={m.img} alt={m.title} fill sizes="(max-width: 768px) 100vw, 768px" className="object-cover" />
                   </div>
                 ) : (
                   <div className="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center text-gray-400">

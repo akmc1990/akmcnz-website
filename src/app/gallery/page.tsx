@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { FaUpload, FaTimes, FaSpinner, FaImages, FaSignInAlt, FaSignOutAlt, FaTrash } from 'react-icons/fa';
 
@@ -209,8 +210,8 @@ export default function GalleryPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredPhotos.map(photo => (
               <div key={photo.public_id} className="group relative bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 cursor-pointer" onClick={() => setSelectedPhoto(photo)}>
-                <div className="aspect-square overflow-hidden">
-                  <img src={photo.secure_url} alt={photo.context?.custom?.caption || ''} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <div className="relative aspect-square overflow-hidden">
+                  <Image src={photo.secure_url} alt={photo.context?.custom?.caption || ''} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover group-hover:scale-105 transition-transform duration-300" />
                 </div>
                 {isAdmin && (
                   <button

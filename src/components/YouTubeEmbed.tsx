@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
 export default function YouTubeEmbed({ videoId, title }: { videoId: string; title: string }) {
   const [playing, setPlaying] = useState(false)
@@ -24,11 +25,12 @@ export default function YouTubeEmbed({ videoId, title }: { videoId: string; titl
       className="relative w-full h-full group"
       aria-label={`${title} 재생`}
     >
-      <img
+      <Image
         src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
         alt={title}
-        loading="lazy"
-        className="w-full h-full object-cover"
+        fill
+        sizes="(max-width: 768px) 100vw, 768px"
+        className="object-cover"
       />
       <span className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/35 transition-colors">
         <span className="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
