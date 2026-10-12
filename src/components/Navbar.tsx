@@ -30,7 +30,7 @@ const navItems: NavItem[] = [
     { href: '/worship/news', label: '교회소식/주보' },
   ]},
   { href: '/gallery', label: '사진/영상' },
-  { href: '/mission', label: '선교' },
+  { href: '/mission', label: '선교와 섬김' },
   { href: '/directions', label: '오시는 길' },
   { href: '/contact', label: 'Contact' },
 ]
