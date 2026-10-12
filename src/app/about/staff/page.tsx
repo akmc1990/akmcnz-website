@@ -6,7 +6,7 @@ const staff = [
     nameEn: 'Pastor Jikyum Kim',
     role: '담임목사',
     roleEn: 'Senior Pastor',
-    image: '/staff/senior-pastor.png',
+    image: '/staff/senior-pastor.jpg',
   },
   {
     nameKo: '유성재',
