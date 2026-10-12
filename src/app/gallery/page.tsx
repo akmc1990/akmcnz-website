@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { FaUpload, FaTimes, FaSpinner, FaImages, FaSignInAlt, FaSignOutAlt, FaTrash } from 'react-icons/fa';
 
-const TAGS = ['전체', '유아', '아동', '학생', '청년', '청장년', '장년', '문화', '선교'];
+const TAGS = ['전체', '유아부', '아동부', '학생부', '청년부', '장년부', '문화부', '선교부'];
 
 interface Photo {
   public_id: string;
@@ -22,7 +22,7 @@ export default function GalleryPage() {
   const [loading, setLoading] = useState(true);
   const [selectedTag, setSelectedTag] = useState('전체');
   const [uploading, setUploading] = useState(false);
-  const [uploadTag, setUploadTag] = useState('장년');
+  const [uploadTag, setUploadTag] = useState('장년부');
   const [caption, setCaption] = useState('');
   const [showUpload, setShowUpload] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
