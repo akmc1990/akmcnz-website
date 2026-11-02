@@ -4,6 +4,15 @@ import { FaMapMarkerAlt, FaClock } from 'react-icons/fa'
 
 const locations = [
   {
+    name: '교회 주보',
+    nameEn: 'Church Bulletin',
+    address: '교회소식 / 예배 순서',
+    timesLabel: null,
+    times: ['매주 업데이트'],
+    img: '/fellowship-hall.jpg',
+    href: '/worship/news',
+  },
+  {
     name: '오클랜드감리교회',
     nameEn: 'Auckland Korean Methodist Church',
     address: 'Takapuna, Auckland, New Zealand',
@@ -52,7 +61,7 @@ export default function QuickLinks() {
             오시는 길 →
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {locations.map((loc, i) => (
             <Link key={i} href={loc.href} className="group block bg-gray-50 hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-600">
               <div className="relative h-52 overflow-hidden">
