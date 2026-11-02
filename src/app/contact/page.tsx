@@ -53,39 +53,33 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <FiPhone className="w-5 h-5 text-church-teal" />
-                </div>
-                <div>
-                  <p className="font-semibold text-church-navy mb-1">전화</p>
-                  <a href="tel:+6494419114" className="text-gray-600 text-sm hover:text-church-teal">+64-9-441-9114</a>
-                </div>
+            <a href="tel:+6494419114" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+              <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <FiPhone className="w-5 h-5 text-church-teal" />
               </div>
-            </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <FiMail className="w-5 h-5 text-church-teal" />
-                </div>
-                <div>
-                  <p className="font-semibold text-church-navy mb-1">이메일</p>
-                  <a href="mailto:admin@akmcnz.org" className="text-gray-600 text-sm hover:text-church-teal">admin@akmcnz.org</a>
-                </div>
+              <div>
+                <p className="font-semibold text-church-navy mb-1">전화</p>
+                <span className="text-gray-600 text-sm">+64-9-441-9114</span>
               </div>
-            </div>
-            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <FaInstagram className="w-5 h-5 text-church-teal" />
-                </div>
-                <div>
-                  <p className="font-semibold text-church-navy mb-1">인스타그램</p>
-                  <a href="https://www.instagram.com/akmc_inchrist" target="_blank" rel="noopener noreferrer" className="text-gray-600 text-sm hover:text-church-teal">@akmc_inchrist</a>
-                </div>
+            </a>
+            <a href="mailto:admin@akmcnz.org" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+              <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <FiMail className="w-5 h-5 text-church-teal" />
               </div>
-            </div>
+              <div>
+                <p className="font-semibold text-church-navy mb-1">이메일</p>
+                <span className="text-gray-600 text-sm">admin@akmcnz.org</span>
+              </div>
+            </a>
+            <a href="https://www.instagram.com/akmc_inchrist" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+              <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <FaInstagram className="w-5 h-5 text-church-teal" />
+              </div>
+              <div>
+                <p className="font-semibold text-church-navy mb-1">인스타그램</p>
+                <span className="text-gray-600 text-sm">@akmc_inchrist</span>
+              </div>
+            </a>
           </div>
 
           <div className="lg:col-span-2">
