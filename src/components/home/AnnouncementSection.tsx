@@ -36,7 +36,7 @@ export default async function AnnouncementSection() {
         </div>
       </section>
       <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-4">
           <h2
             className="font-black uppercase text-[#3d5d96] leading-none mb-6"
             style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
