@@ -42,17 +42,20 @@ export default function ContactPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <FiMapPin className="w-5 h-5 text-church-teal" />
-                </div>
-                <div>
-                  <p className="font-semibold text-church-navy mb-1">주소</p>
-                  <p className="text-gray-600 text-sm">427 Lake Road, Takapuna,<br />Auckland 0622, NZ</p>
-                </div>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=427+Lake+Road%2C+Takapuna%2C+Auckland+0622%2C+New+Zealand"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200"
+            >
+              <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <FiMapPin className="w-5 h-5 text-church-teal" />
               </div>
-            </div>
+              <div>
+                <p className="font-semibold text-church-navy mb-1">주소</p>
+                <span className="text-gray-600 text-sm">427 Lake Road, Takapuna,<br />Auckland 0622, NZ</span>
+              </div>
+            </a>
             <a href="tel:+6494419114" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
               <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
                 <FiPhone className="w-5 h-5 text-church-teal" />
