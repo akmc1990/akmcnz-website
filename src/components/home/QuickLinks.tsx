@@ -36,21 +36,16 @@ export default function QuickLinks() {
   return (
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-end justify-between mb-12">
-          <div>
-            <h2
-              className="font-black uppercase text-[#3d5d96] leading-none mb-3"
-              style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
-            >
-              예배 안내
-            </h2>
-            <p className="text-gray-600 text-base">
-              주일마다 당신의 자리가 있습니다. 오클랜드감리교회에서 함께 예배드려요.
-            </p>
-          </div>
-          <Link href="/directions" className="hidden sm:block text-black font-bold uppercase text-sm tracking-wide hover:text-blue-600 transition-colors">
-            오시는 길 →
-          </Link>
+        <div className="mb-12">
+          <h2
+            className="font-black uppercase text-[#3d5d96] leading-none mb-3"
+            style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', fontFamily: 'Impact, Arial Black, sans-serif' }}
+          >
+            예배 안내
+          </h2>
+          <p className="text-gray-600 text-base">
+            주일마다 당신의 자리가 있습니다. 오클랜드감리교회에서 함께 예배드려요.
+          </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {locations.map((loc, i) => (
