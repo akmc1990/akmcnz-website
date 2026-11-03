@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { FaUpload, FaTimes, FaSpinner, FaImages, FaSignInAlt, FaSignOutAlt, FaTrash } from 'react-icons/fa';
+import YouTubeEmbed from '@/components/YouTubeEmbed';
+import type { BlogGalleryPost } from '@/lib/blogGallery';
 
 const TAGS = ['전체', '유아부', '아동부', '학생부', '청년부', '장년부', '문화부', '선교부'];
 
@@ -27,11 +29,29 @@ export default function GalleryPage() {
   const [showUpload, setShowUpload] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [blogPosts, setBlogPosts] = useState<BlogGalleryPost[]>([]);
+  const [blogLoading, setBlogLoading] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchPhotos();
+    fetchBlogGallery();
   }, []);
+
+  const fetchBlogGallery = async () => {
+    setBlogLoading(true);
+    try {
+      const res = await fetch('/api/blog-gallery');
+      if (res.ok) {
+        const data = await res.json();
+        setBlogPosts(data.posts || []);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setBlogLoading(false);
+    }
+  };
 
   const fetchPhotos = async () => {
     setLoading(true);
@@ -227,6 +247,52 @@ export default function GalleryPage() {
                 )}
               </div>
             ))}
+          </div>
+        )}
+
+        {!blogLoading && blogPosts.length > 0 && (
+          <div className="mt-14">
+            <h2 className="text-xl font-bold text-church-navy mb-6 flex items-center gap-2">
+              <FaImages className="text-church-teal" /> 지난 행사 사진 / 영상
+            </h2>
+            <div className="space-y-10">
+              {blogPosts.map((post, i) => (
+                <div key={i}>
+                  <a
+                    href={post.postUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block font-semibold text-church-navy hover:text-church-teal mb-3"
+                  >
+                    {post.title}
+                  </a>
+                  {post.images.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                      {post.images.map((img, j) => (
+                        <a
+                          key={j}
+                          href={img.full}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="relative aspect-square block rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-white"
+                        >
+                          <Image src={img.thumb} alt={post.title} fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover hover:scale-105 transition-transform duration-300" />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                  {post.videoIds.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {post.videoIds.map(videoId => (
+                        <div key={videoId} className="aspect-video rounded-xl overflow-hidden shadow-sm border border-gray-100">
+                          <YouTubeEmbed videoId={videoId} title={post.title} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
