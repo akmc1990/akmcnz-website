@@ -1,6 +1,3 @@
-'use client'
-
-import { useState } from 'react'
 import Image from 'next/image'
 
 const visions = [
@@ -44,13 +41,6 @@ const visions = [
 ]
 
 export default function VisionSection() {
-  const [flashed, setFlashed] = useState<number | null>(null)
-
-  const handleClick = (i: number) => {
-    setFlashed(i)
-    setTimeout(() => setFlashed(null), 300)
-  }
-
   return (
     <section className="pt-4 pb-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -72,8 +62,7 @@ export default function VisionSection() {
           {visions.map((v, i) => (
             <div
               key={i}
-              onClick={() => v.image && handleClick(i)}
-              className={`relative border-r border-b border-gray-200 p-8 transition-colors group overflow-hidden ${v.image ? 'min-h-[320px] flex flex-col justify-end cursor-pointer' : 'hover:bg-gray-50'}`}
+              className={`relative border-r border-b border-gray-200 p-8 transition-colors group overflow-hidden ${v.image ? 'min-h-[320px] flex flex-col justify-end' : 'hover:bg-gray-50'}`}
             >
               {v.image && (
                 <>
@@ -85,7 +74,7 @@ export default function VisionSection() {
                     className="object-cover"
                     style={{ objectPosition: v.imagePosition ?? 'center' }}
                   />
-                  <div className={`absolute inset-0 transition-colors duration-300 ${flashed === i ? 'bg-black' : 'bg-black/60 group-hover:bg-black/50'}`} />
+                  <div className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors" />
                 </>
               )}
               <div className="relative z-10">
