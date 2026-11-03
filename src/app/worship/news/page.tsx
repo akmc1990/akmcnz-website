@@ -2,14 +2,24 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import type { BlogBulletin } from '@/lib/blogBulletin';
 
 interface CardNewsEntry { date: string; url: string; public_id: string; }
+
+interface UnifiedBulletin {
+  date: string;
+  source: 'cloudinary' | 'blog';
+  url: string;
+  public_id?: string;
+  postUrl?: string;
+}
 
 export default function NewsPage() {
   const { data: session } = useSession();
   const isAdmin = !!session?.user;
 
-  const [list, setList] = useState<CardNewsEntry[]>([]);
+  const [cardnews, setCardnews] = useState<CardNewsEntry[]>([]);
+  const [blogBulletins, setBlogBulletins] = useState<BlogBulletin[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -26,16 +36,33 @@ export default function NewsPage() {
   const fetchList = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/cardnews');
-      if (res.ok) {
-        const d = await res.json();
-        const entries: CardNewsEntry[] = d.cardnews || [];
-        setList(entries);
-        if (entries.length > 0) { setSelectedDate(entries[0].date); }
-      }
+      const [cardnewsRes, blogRes] = await Promise.all([
+        fetch('/api/cardnews'),
+        fetch('/api/blog-bulletin'),
+      ]);
+      const cardnewsEntries: CardNewsEntry[] = cardnewsRes.ok ? (await cardnewsRes.json()).cardnews || [] : [];
+      const blogEntries: BlogBulletin[] = blogRes.ok ? (await blogRes.json()).bulletins || [] : [];
+      setCardnews(cardnewsEntries);
+      setBlogBulletins(blogEntries);
+
+      const firstDate = [...cardnewsEntries.map(e => e.date), ...blogEntries.map(e => e.date)].sort().reverse()[0];
+      if (firstDate) { setSelectedDate(firstDate); }
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
+
+  // One entry per date. A manually-uploaded PDF (viewable inline) takes
+  // priority over a blog-sourced one (OneDrive link, external view only) for the same date.
+  const list: UnifiedBulletin[] = (() => {
+    const byDate = new Map<string, UnifiedBulletin>();
+    for (const b of blogBulletins) {
+      byDate.set(b.date, { date: b.date, source: 'blog', url: b.pdfUrl, postUrl: b.postUrl });
+    }
+    for (const c of cardnews) {
+      byDate.set(c.date, { date: c.date, source: 'cloudinary', url: c.url, public_id: c.public_id });
+    }
+    return Array.from(byDate.values()).sort((a, b) => b.date.localeCompare(a.date));
+  })();
 
   const selectedEntry = list.find(e => e.date === selectedDate) || null;
 
@@ -157,7 +184,7 @@ export default function NewsPage() {
             <div className="flex-1">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-church-gold">{selectedDate}</h2>
-                {selectedEntry && (
+                {selectedEntry && selectedEntry.source === 'cloudinary' && (
                   <div className="flex gap-3 text-sm">
                     <a href={selectedEntry.url} target="_blank" rel="noopener noreferrer"
                       className="text-church-teal hover:underline">새 탭에서 보기</a>
@@ -166,12 +193,19 @@ export default function NewsPage() {
                   </div>
                 )}
               </div>
-              {selectedEntry ? (
+              {!selectedEntry ? (
+                <p className="text-gray-400 text-center py-10">PDF가 없습니다.</p>
+              ) : selectedEntry.source === 'cloudinary' ? (
                 <div className="bg-white rounded-2xl shadow overflow-hidden" style={{ height: '80vh' }}>
                   <iframe src={selectedEntry.url} title={`${selectedDate} 주보`} className="w-full h-full border-0" />
                 </div>
               ) : (
-                <p className="text-gray-400 text-center py-10">PDF가 없습니다.</p>
+                <div className="bg-white rounded-2xl shadow p-10 text-center">
+                  <a href={selectedEntry.url} target="_blank" rel="noopener noreferrer"
+                    className="inline-block bg-[#3d5d96] text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition">
+                    {selectedDate} 주보 보기 →
+                  </a>
+                </div>
               )}
             </div>
 
@@ -184,8 +218,11 @@ export default function NewsPage() {
                     <button onClick={() => handleSelectDate(entry.date)}
                       className={`flex-1 text-left px-3 py-2 rounded-lg text-sm transition ${selectedDate === entry.date ? 'bg-gray-100 font-semibold text-church-navy' : 'hover:bg-gray-50 text-gray-700'}`}>
                       {entry.date}
+                      {entry.source === 'blog' && (
+                        <span className="ml-1.5 text-[10px] text-gray-400 align-middle">블로그</span>
+                      )}
                     </button>
-                    {isAdmin && (
+                    {isAdmin && entry.source === 'cloudinary' && (
                       <button onClick={() => handleDelete(entry.date)} disabled={deleting === entry.date}
                         className="text-red-400 hover:text-red-600 text-xs px-1 disabled:opacity-50" title="삭제">
                         ✕
