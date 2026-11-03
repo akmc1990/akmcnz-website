@@ -74,7 +74,7 @@ export default function VisionSection() {
                     className="object-cover"
                     style={{ objectPosition: v.imagePosition ?? 'center' }}
                   />
-                  <div className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors" />
+                  <div className="absolute inset-0 bg-black/60 group-hover:bg-black transition-colors duration-300" />
                 </>
               )}
               <div className="relative z-10">
