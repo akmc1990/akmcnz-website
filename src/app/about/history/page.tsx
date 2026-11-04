@@ -74,18 +74,18 @@ export default function HistoryPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="bg-church-red text-white rounded-xl p-5 mb-8">
-          <h2 className="text-lg font-bold">오클랜드감리교회 발자취</h2>
-          <p className="text-white/80 text-sm">The Footsteps of Auckland Korean Methodist Church</p>
+        <div className="mb-8">
+          <p className="text-gray-600 text-lg font-bold">오클랜드감리교회 발자취</p>
+          <p className="text-gray-400 text-base mt-1 italic font-bold">The Footsteps of Auckland Korean Methodist Church</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-[#3d5d96] overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-gray-50 border-b-2 border-[#3d5d96]">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 w-24">연도 (Year)</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600 w-32">날짜 (Date)</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-600">내용 (History)</th>
+                <th className="px-4 py-3 text-left text-sm font-bold text-black w-24 border-r border-gray-200">연도 (Year)</th>
+                <th className="px-4 py-3 text-left text-sm font-bold text-black w-32 border-r border-gray-200">날짜 (Date)</th>
+                <th className="px-4 py-3 text-left text-sm font-bold text-black">내용 (History)</th>
               </tr>
             </thead>
             <tbody>
@@ -93,14 +93,14 @@ export default function HistoryPage() {
                 period.entries.map((entry, idx) => (
                   <tr key={`${period.year}-${idx}`} className="border-b border-gray-100 hover:bg-gray-50">
                     {idx === 0 ? (
-                      <td className="px-4 py-3 font-bold text-church-red align-top" rowSpan={period.entries.length}>
+                      <td className="px-4 py-3 font-bold text-black align-top border-r border-gray-200" rowSpan={period.entries.length}>
                         {period.year}
                       </td>
                     ) : null}
-                    <td className="px-4 py-3 text-sm text-gray-600 align-top whitespace-nowrap">{entry.date}</td>
-                    <td className="px-4 py-3 text-sm text-gray-800">
+                    <td className="px-4 py-3 text-sm text-black align-top whitespace-nowrap border-r border-gray-200">{entry.date}</td>
+                    <td className="px-4 py-3 text-sm text-black">
                       {entry.content.split('\n').map((line, i) => (
-                        <p key={i} className={i === 1 ? 'text-gray-400 italic text-xs mt-0.5' : 'font-medium'}>{line}</p>
+                        <p key={i} className={i === 1 ? 'text-black italic text-xs mt-0.5' : 'font-medium'}>{line}</p>
                       ))}
                     </td>
                   </tr>

@@ -49,7 +49,7 @@ export default function QuickLinks() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {locations.map((loc, i) => (
-            <Link key={i} href={loc.href} className="group block bg-gray-50 hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-blue-600">
+            <Link key={i} href={loc.href} className="group block bg-gray-50 hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-[#3d5d96]">
               <div className="relative h-52 overflow-hidden">
                 <Image
                   src={loc.img}
@@ -61,18 +61,18 @@ export default function QuickLinks() {
               </div>
               <div className="p-6">
                 <h3
-                  className="font-black text-black uppercase text-xl mb-1 group-hover:text-blue-600 transition-colors"
+                  className="font-black text-black uppercase text-xl mb-1 group-hover:text-[#3d5d96] transition-colors"
                   style={{ fontFamily: 'Impact, Arial Black, sans-serif' }}
                 >
                   {loc.name}
                 </h3>
-                <p className="text-blue-600 text-xs font-bold uppercase tracking-wide mb-4">{loc.nameEn}</p>
+                <p className="text-[#3d5d96] text-xs font-bold uppercase tracking-wide mb-4">{loc.nameEn}</p>
                 <div className="flex items-center gap-2 text-gray-600 text-sm mb-2">
-                  <FaMapMarkerAlt className="text-blue-600 flex-shrink-0" />
+                  <FaMapMarkerAlt className="text-[#3d5d96] flex-shrink-0" />
                   <span>{loc.address}</span>
                 </div>
                 <div className="flex items-start gap-2 text-gray-600 text-sm mb-4">
-                  <FaClock className="text-blue-600 flex-shrink-0 mt-0.5" />
+                  <FaClock className="text-[#3d5d96] flex-shrink-0 mt-0.5" />
                   <div>
                     {loc.timesLabel && (
                       <span className="block font-bold uppercase text-xs tracking-wide">{loc.timesLabel}</span>
@@ -82,7 +82,7 @@ export default function QuickLinks() {
                     ))}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-black font-bold text-sm uppercase group-hover:text-blue-600 transition-colors">
+                <div className="flex items-center gap-2 text-black font-bold text-sm uppercase group-hover:text-[#3d5d96] transition-colors">
                   <span>자세히 보기</span>
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </div>

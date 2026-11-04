@@ -10,7 +10,7 @@ const programs = [
     category: '제자훈련 과정',
     categoryEn: 'Discipleship Training',
     icon: FaUsers,
-    color: 'church-navy',
+    color: 'gray-800',
     items: [
       {
         name: '확신반',
@@ -33,7 +33,7 @@ const programs = [
     category: '사역훈련 과정',
     categoryEn: 'Ministry Training',
     icon: FaPray,
-    color: 'church-red',
+    color: 'gray-800',
     items: [
       {
         name: '전도폭발훈련',
@@ -51,7 +51,7 @@ const programs = [
     category: '성경공부 과정',
     categoryEn: 'Bible Study',
     icon: FaBible,
-    color: 'church-teal',
+    color: 'gray-800',
     items: [
       {
         name: '구약의 파노라마',
@@ -83,9 +83,9 @@ export default function NurturePage() {
       {/* Hero */}
       <div className="bg-church-navy py-16 text-center">
         <FaBook className="text-church-gold text-5xl mx-auto mb-4" />
-        <h1 className="text-4xl font-bold text-white mb-2">양육</h1>
-        <p className="text-church-gold text-lg">Nurture &amp; Training</p>
-        <p className="text-white/70 mt-3 text-sm max-w-xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-black mb-2">양육</h1>
+        <p className="text-black text-lg">Nurture &amp; Training</p>
+        <p className="text-black/70 mt-3 text-sm max-w-xl mx-auto px-4">
           양육과 훈련 과정 안내
         </p>
       </div>
@@ -94,12 +94,12 @@ export default function NurturePage() {
         {programs.map((program, idx) => {
           const Icon = program.icon;
           return (
-            <div key={idx} className="bg-white rounded-2xl shadow-md overflow-hidden border border-black">
+            <div key={idx} className="bg-white rounded-2xl shadow-md overflow-hidden border-2 border-black">
               <div className={`bg-${program.color} px-6 py-5 flex items-center gap-3`}>
                 <Icon className="text-white text-2xl" />
                 <div>
                   <h2 className="text-white font-bold text-xl">◆ {program.category}</h2>
-                  <p className="text-white/70 text-sm">{program.categoryEn}</p>
+                  <p className="text-white/70 text-sm font-bold">{program.categoryEn}</p>
                 </div>
               </div>
               <div className="p-6 space-y-5">
@@ -120,7 +120,7 @@ export default function NurturePage() {
         })}
 
         {/* Contact for more info */}
-        <div className="bg-church-cream rounded-2xl p-6 text-center border border-church-gold/30">
+        <div className="bg-church-cream rounded-2xl p-6 text-center border-2 border-black">
           <FaBook className="text-church-gold text-3xl mx-auto mb-3" />
           <h3 className="font-bold text-church-navy text-lg mb-2">프로그램 참여 문의</h3>
           <p className="text-gray-600 text-sm mb-4">양육 및 훈련 프로그램에 대한 자세한 정보는 교회에 문의해 주세요.</p>

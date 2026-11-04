@@ -55,7 +55,7 @@ export default function Navbar() {
                 {item.children ? (
                   <>
                     <button
-                      className="flex items-center gap-1 text-black font-bold uppercase text-sm tracking-wide hover:text-blue-600 transition-colors"
+                      className="flex items-center gap-1 text-black font-bold uppercase text-sm tracking-wide hover:text-[#3d5d96] transition-colors"
                       onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
                     >
                       {item.label} <FaChevronDown className="text-xs" />
@@ -63,7 +63,7 @@ export default function Navbar() {
                     <ul className="absolute top-full left-0 mt-1 bg-white min-w-max opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl border border-gray-100">
                       {item.children.map((child) => (
                         <li key={child.href}>
-                          <Link href={child.href} className="block px-4 py-2 text-black text-sm hover:bg-blue-600 hover:text-white transition-colors whitespace-nowrap">
+                          <Link href={child.href} className="block px-4 py-2 text-black text-sm hover:bg-[#3d5d96] hover:text-white transition-colors whitespace-nowrap">
                             {child.label}
                           </Link>
                         </li>
@@ -71,7 +71,7 @@ export default function Navbar() {
                     </ul>
                   </>
                 ) : (
-                  <Link href={item.href!} className="text-black font-bold uppercase text-sm tracking-wide hover:text-blue-600 transition-colors">
+                  <Link href={item.href!} className="text-black font-bold uppercase text-sm tracking-wide hover:text-[#3d5d96] transition-colors">
                     {item.label}
                   </Link>
                 )}

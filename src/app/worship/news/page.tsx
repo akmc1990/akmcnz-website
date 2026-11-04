@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import type { BlogBulletin } from '@/lib/blogBulletin';
 
 interface CardNewsEntry { date: string; url: string; public_id: string; }
@@ -15,8 +17,17 @@ interface UnifiedBulletin {
 }
 
 export default function NewsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">로딩 중...</div>}>
+      <NewsPageContent />
+    </Suspense>
+  );
+}
+
+function NewsPageContent() {
   const { data: session } = useSession();
   const isAdmin = !!session?.user;
+  const searchParams = useSearchParams();
 
   const [cardnews, setCardnews] = useState<CardNewsEntry[]>([]);
   const [blogBulletins, setBlogBulletins] = useState<BlogBulletin[]>([]);
@@ -24,6 +35,7 @@ export default function NewsPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
 
+  const [showAllBulletins, setShowAllBulletins] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [uploadDate, setUploadDate] = useState('');
   const [uploadFile, setUploadFile] = useState<File | null>(null);
@@ -31,7 +43,7 @@ export default function NewsPage() {
   const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { fetchList(); }, []);
+  useEffect(() => { fetchList(); }, [searchParams]);
 
   const fetchList = async () => {
     setLoading(true);
@@ -45,7 +57,11 @@ export default function NewsPage() {
       setCardnews(cardnewsEntries);
       setBlogBulletins(blogEntries);
 
-      const firstDate = [...cardnewsEntries.map(e => e.date), ...blogEntries.map(e => e.date)].sort().reverse()[0];
+      const allDates = [...cardnewsEntries.map(e => e.date), ...blogEntries.map(e => e.date)];
+      const requestedDate = searchParams.get('date');
+      const firstDate = requestedDate && allDates.includes(requestedDate)
+        ? requestedDate
+        : allDates.sort().reverse()[0];
       if (firstDate) { setSelectedDate(firstDate); }
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
@@ -122,11 +138,17 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-[7.5rem] pb-10 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50 pt-16 pb-10">
+      <div className="bg-gray-800 text-white py-12 relative overflow-hidden">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl font-bold mb-2 text-white">교회소식 / 주보</h1>
+          <p className="text-gray-400">Church News &amp; Bulletin</p>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 pt-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-church-navy">교회소식 / 주보</h1>
+        <div className="flex items-center justify-end mb-8">
           <div className="flex items-center gap-3">
             {isAdmin ? (
               <>
@@ -196,11 +218,11 @@ export default function NewsPage() {
               {!selectedEntry ? (
                 <p className="text-gray-400 text-center py-10">PDF가 없습니다.</p>
               ) : selectedEntry.source === 'cloudinary' ? (
-                <div className="bg-white rounded-2xl shadow overflow-hidden" style={{ height: '80vh' }}>
+                <div className="bg-white rounded-2xl shadow border border-gray-700 overflow-hidden" style={{ height: '80vh' }}>
                   <iframe src={selectedEntry.url} title={`${selectedDate} 주보`} className="w-full h-full border-0" />
                 </div>
               ) : (
-                <div className="bg-white rounded-2xl shadow p-10 text-center">
+                <div className="bg-white rounded-2xl shadow border border-gray-700 p-10 text-center">
                   <a href={selectedEntry.url} target="_blank" rel="noopener noreferrer"
                     className="inline-block bg-[#3d5d96] text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition">
                     {selectedDate} 주보 보기 →
@@ -210,16 +232,16 @@ export default function NewsPage() {
             </div>
 
             {/* Archive sidebar */}
-            <div className="w-full md:w-56 flex-shrink-0">
-              <h2 className="text-base font-semibold text-church-navy mb-3">주보 아카이브</h2>
+            <div className="w-full md:w-56 flex-shrink-0 bg-white rounded-2xl shadow border border-gray-700 p-4">
+              <h2 className="text-base font-semibold text-church-navy mb-3">주보 목록</h2>
               <div className="space-y-2">
-                {list.map(entry => (
+                {(showAllBulletins ? list.slice(0, 10) : list.slice(0, 5)).map(entry => (
                   <div key={entry.date} className="flex items-center gap-1">
                     <button onClick={() => handleSelectDate(entry.date)}
-                      className={`flex-1 text-left px-3 py-2 rounded-lg text-sm transition ${selectedDate === entry.date ? 'bg-gray-100 font-semibold text-church-navy' : 'hover:bg-gray-50 text-gray-700'}`}>
+                      className={`flex-1 text-left px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${selectedDate === entry.date ? 'bg-gray-100 text-[#3d5d96]' : 'hover:bg-gray-50 text-gray-700'}`}>
                       {entry.date}
                       {entry.source === 'blog' && (
-                        <span className="ml-1.5 text-[10px] text-gray-400 align-middle">블로그</span>
+                        <span className="ml-1.5 text-[10px] text-gray-400 align-middle">주보</span>
                       )}
                     </button>
                     {isAdmin && entry.source === 'cloudinary' && (
@@ -231,6 +253,20 @@ export default function NewsPage() {
                   </div>
                 ))}
               </div>
+              {list.length > 5 && (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <button onClick={() => setShowAllBulletins(v => !v)}
+                    className="w-full text-center py-2.5 rounded-lg text-sm font-bold text-[#3d5d96] bg-gray-50 hover:bg-gray-100 hover:shadow-md transition-all duration-200">
+                    {showAllBulletins ? '접기' : '더보기'}
+                  </button>
+                </div>
+              )}
+              {showAllBulletins && list.length > 10 && (
+                <Link href="/worship/news/all"
+                  className="block w-full text-center mt-2 py-1.5 rounded-lg text-sm bg-[#3d5d96] text-white font-bold transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+                  전체보기
+                </Link>
+              )}
             </div>
           </div>
         )}

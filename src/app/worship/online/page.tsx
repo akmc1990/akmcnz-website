@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { FiYoutube, FiBell, FiExternalLink } from 'react-icons/fi'
+import { FaLaptop } from 'react-icons/fa'
 import { getLatestVideo, getRecentVideos } from '@/lib/youtube'
 import YouTubeEmbed from '@/components/YouTubeEmbed'
 
@@ -16,12 +17,13 @@ export default async function OnlineWorshipPage() {
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="bg-church-navy text-black py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <FaLaptop className="text-black text-5xl mx-auto mb-4" />
           <h1 className="text-3xl md:text-4xl font-bold mb-3">실시간 / 온라인 예배</h1>
           <p className="text-black text-lg">Live & Online Worship</p>
         </div>
       </div>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-700 p-6 mb-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
@@ -44,7 +46,7 @@ export default async function OnlineWorshipPage() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-700 overflow-hidden mb-8">
           <div className="p-4 border-b border-gray-100 flex items-center justify-between">
             <h2 className="font-bold text-church-navy">최근 예배 영상</h2>
             <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-church-teal text-sm hover:underline">
@@ -100,7 +102,7 @@ export default async function OnlineWorshipPage() {
             </div>
           )}
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-700 p-4 mb-8">
           <h2 className="font-bold text-church-navy mb-2 text-base">YouTube 채널 바로가기</h2>
           <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-church-navy hover:bg-church-teal text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
             <FiYoutube className="w-4 h-4" />
@@ -113,7 +115,7 @@ export default async function OnlineWorshipPage() {
             </a>
           </p>
         </div>
-        <div className="bg-church-cream rounded-xl border border-church-gold/30 p-6">
+        <div className="bg-church-cream rounded-xl border border-gray-700 p-6">
           <h3 className="font-bold text-church-navy mb-3">온라인 헌금 안내</h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             {[

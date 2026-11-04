@@ -17,6 +17,7 @@ export default function DirectionsPage() {
   return (
     <div className="min-h-screen bg-church-light pt-20">
       <div className="bg-church-navy py-16 text-center">
+        <FaMapMarkerAlt className="text-black text-5xl mx-auto mb-4" />
         <h1 className="text-4xl font-bold text-black mb-2">오시는 길 (Location)</h1>
         <p className="text-[#3d5d96] pt-4">
           시티/노스쇼어 픽업 문의<br />
@@ -56,8 +57,8 @@ export default function DirectionsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-          <div className="bg-church-teal px-6 py-4">
+        <div className="bg-white rounded-2xl shadow-md border border-gray-700 overflow-hidden">
+          <div className="bg-church-teal px-6 py-4 border-b border-gray-300">
             <h2 className="text-black font-bold text-xl flex items-center gap-2">
               <MdDirectionsBus />
               가까운 버스정류장
@@ -74,11 +75,11 @@ export default function DirectionsPage() {
                 ))}
               </div>
             </div>
-            <div className="border-t border-gray-100 pt-4">
+            <div className="border-t-2 border-black pt-4">
               <h3 className="font-semibold text-church-navy mb-3">정류장 위치</h3>
               <div className="space-y-3">
                 {busStops.map((stop, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                  <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-700">
                     <FaBus className="text-church-teal mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="font-medium text-gray-800">{stop.address}</p>
