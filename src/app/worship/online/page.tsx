@@ -128,7 +128,7 @@ export default async function OnlineWorshipPage() {
               { code: '7', label: '절기헌금' },
             ].map(item => (
               <div key={item.code} className="flex items-center gap-2 bg-white rounded-lg p-3 border border-gray-100">
-                <span className="w-7 h-7 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">{item.code}</span>
+                <span className="w-7 h-7 bg-[#3d5d96] text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">{item.code}</span>
                 <span className="text-sm font-medium text-gray-700">{item.label}</span>
               </div>
             ))}

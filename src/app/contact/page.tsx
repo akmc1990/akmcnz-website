@@ -47,7 +47,7 @@ export default function ContactPage() {
               href="https://www.google.com/maps/search/?api=1&query=427+Lake+Road%2C+Takapuna%2C+Auckland+0622%2C+New+Zealand"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-start gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200"
+              className="flex items-start gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-400 hover:border-2 hover:border-black hover:shadow-md transition-all duration-200"
             >
               <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
                 <FiMapPin className="w-5 h-5 text-church-teal" />
@@ -57,7 +57,7 @@ export default function ContactPage() {
                 <span className="text-gray-600 text-sm">427 Lake Road, Takapuna,<br />Auckland 0622, NZ</span>
               </div>
             </a>
-            <a href="tel:+6494419114" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+            <a href="tel:+6494419114" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-400 hover:border-2 hover:border-black hover:shadow-md transition-all duration-200">
               <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
                 <FiPhone className="w-5 h-5 text-church-teal" />
               </div>
@@ -66,7 +66,7 @@ export default function ContactPage() {
                 <span className="text-gray-600 text-sm">+64-9-441-9114</span>
               </div>
             </a>
-            <a href="mailto:admin@akmcnz.org" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+            <a href="mailto:admin@akmcnz.org" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-400 hover:border-2 hover:border-black hover:shadow-md transition-all duration-200">
               <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
                 <FiMail className="w-5 h-5 text-church-teal" />
               </div>
@@ -75,7 +75,7 @@ export default function ContactPage() {
                 <span className="text-gray-600 text-sm">admin@akmcnz.org</span>
               </div>
             </a>
-            <a href="https://www.instagram.com/akmc_inchrist" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-100 hover:border-gray-300 hover:shadow-md transition-all duration-200">
+            <a href="https://www.instagram.com/akmc_inchrist" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white rounded-xl p-5 shadow-sm border border-gray-400 hover:border-2 hover:border-black hover:shadow-md transition-all duration-200">
               <div className="w-10 h-10 bg-church-teal/10 rounded-lg flex items-center justify-center flex-shrink-0">
                 <FaInstagram className="w-5 h-5 text-church-teal" />
               </div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
 
           <div className="lg:col-span-2">
             {submitted ? (
-              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
+              <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-400 text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FiCheck className="w-8 h-8 text-green-600" />
                 </div>
@@ -96,7 +96,7 @@ export default function ContactPage() {
                 <p className="text-gray-600">빠른 시일 내에 연락드리겠습니다.</p>
               </div>
             ) : (
-              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+              <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-400">
                 <h2 className="text-xl font-bold text-church-navy mb-6">문의하기</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
