@@ -13,6 +13,7 @@ const staff = [
     nameEn: 'Pastor Sungjae You',
     role: '교육목사',
     roleEn: 'Christian Education Pastor',
+    image: '/staff/education-pastor.jpg',
   },
 ]
 
