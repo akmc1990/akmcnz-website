@@ -107,7 +107,7 @@ export default function PhotoSlider({ groups, alt, interval = 4000 }: PhotoSlide
             className={`absolute inset-0 transition-opacity duration-700 ${s === index ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-hidden={s !== index}
           >
-            {group.map((p, j) => {
+            {(s === index || s === (index + 1) % count) && group.map((p, j) => {
               if (group.length === 1) {
                 return (
                   <PolaroidCard
